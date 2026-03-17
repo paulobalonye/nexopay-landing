@@ -1,7 +1,7 @@
 {
-  "name": "autonomi-landing",
+  "name": "agntly-landing",
   "version": "2.0.0",
-  "description": "Autonomi — Payment infrastructure for AI agents",
+  "description": "Agntly — Payment infrastructure for AI agents",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

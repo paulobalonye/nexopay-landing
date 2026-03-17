@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Sitemap: https://nexopay-app-production.up.railway.app/sitemap.xml
+Sitemap: https://agntly.io/sitemap.xml
 
 # Disallow admin
 Disallow: /admin

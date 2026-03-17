@@ -1,9 +1,9 @@
-// Autonomi Shared Nav & Footer injector
+// Agntly Shared Nav & Footer injector
 const NAV_HTML = `
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <nav>
-  <a href="index.html" class="logo">Autono<span>mi</span></a>
+  <a href="index.html" class="logo">Agnt<span>ly</span></a>
   <ul class="nav-links">
     <li><a href="how-it-works.html">How it works</a></li>
     <li><a href="features.html">Features</a></li>
@@ -17,7 +17,7 @@ const NAV_HTML = `
 const FOOTER_HTML = `
 <footer>
   <div>
-    <div class="footer-logo">Autono<span>mi</span></div>
+    <div class="footer-logo">Agnt<span>ly</span></div>
     <p class="footer-tagline">Payments infrastructure for the AI agent economy.</p>
   </div>
   <div class="footer-cols">
@@ -43,7 +43,7 @@ const FOOTER_HTML = `
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2026 Autonomi Inc. All rights reserved.</span>
+    <span>© 2026 Agntly Inc. All rights reserved.</span>
     <div class="footer-socials">
       <a href="#">Twitter/X</a>
       <a href="#">LinkedIn</a>

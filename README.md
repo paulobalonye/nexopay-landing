@@ -1,6 +1,6 @@
-# Autonomi — Payment Infrastructure for AI Agents
+# Agntly — Payment Infrastructure for AI Agents
 
-Landing page and waitlist backend for Autonomi, the autonomous payment API built for AI agents.
+Landing page and waitlist backend for Agntly, the autonomous payment API built for AI agents.
 
 ## Pages
 - `/` — Homepage with waitlist form

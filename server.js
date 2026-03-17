@@ -17,7 +17,7 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 // Resend email client — set RESEND_API_KEY via Railway env var
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
-const EMAIL_FROM = 'Autonomi <noreply@hitchpay.ng>';
+const EMAIL_FROM = 'Agntly <noreply@hitchpay.ng>';
 
 // ─── RATE LIMITER (in-memory, no dependencies) ─────────────────────────────
 const loginAttempts = new Map(); // IP -> { count, firstAttempt }
@@ -59,16 +59,16 @@ function buildWaitlistEmail(firstName) {
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#060608;">
 <tr><td align="center" style="padding:40px 20px;">
 <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;width:100%;">
-  <tr><td style="padding:32px 40px 24px;text-align:left;"><span style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:24px;font-weight:800;color:#f5f4f0;letter-spacing:-0.5px;">Autono<span style="color:#00e5a0;">mi</span></span></td></tr>
+  <tr><td style="padding:32px 40px 24px;text-align:left;"><span style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:24px;font-weight:800;color:#f5f4f0;letter-spacing:-0.5px;">Agnt<span style="color:#00e5a0;">ly</span></span></td></tr>
   <tr><td style="padding:0 40px;"><div style="height:2px;background:linear-gradient(90deg,#00e5a0,#0af,#ff6b35);border-radius:2px;"></div></td></tr>
   <tr><td style="padding:48px 40px 32px;"><h1 style="margin:0 0 8px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:32px;font-weight:800;color:#f5f4f0;letter-spacing:-0.02em;line-height:1.1;">You're in.</h1><p style="margin:0;font-size:14px;color:#00e5a0;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;">Waitlist confirmed</p></td></tr>
-  <tr><td style="padding:0 40px 32px;"><p style="margin:0 0 20px;font-size:16px;color:#c8c8d0;line-height:1.7;">Hey ${firstName},</p><p style="margin:0 0 20px;font-size:16px;color:#c8c8d0;line-height:1.7;">Thanks for signing up for early access to Autonomi &mdash; the payment infrastructure API built for AI agents.</p><p style="margin:0;font-size:16px;color:#c8c8d0;line-height:1.7;">We're onboarding developers in small batches during our private beta. You'll hear from us within <strong style="color:#f5f4f0;">48 hours</strong> with your API key and onboarding guide.</p></td></tr>
+  <tr><td style="padding:0 40px 32px;"><p style="margin:0 0 20px;font-size:16px;color:#c8c8d0;line-height:1.7;">Hey ${firstName},</p><p style="margin:0 0 20px;font-size:16px;color:#c8c8d0;line-height:1.7;">Thanks for signing up for early access to Agntly &mdash; the payment infrastructure API built for AI agents.</p><p style="margin:0;font-size:16px;color:#c8c8d0;line-height:1.7;">We're onboarding developers in small batches during our private beta. You'll hear from us within <strong style="color:#f5f4f0;">48 hours</strong> with your API key and onboarding guide.</p></td></tr>
   <tr><td style="padding:0 40px 40px;"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#111118;border:1px solid rgba(255,255,255,0.07);"><tr><td style="padding:28px 32px;"><p style="margin:0 0 16px;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#00e5a0;font-weight:600;">What's included in early access</p><table role="presentation" cellspacing="0" cellpadding="0" border="0"><tr><td style="padding:6px 0;font-size:15px;color:#c8c8d0;line-height:1.6;"><span style="color:#00e5a0;margin-right:10px;">&#10003;</span> Free API credits to start building</td></tr><tr><td style="padding:6px 0;font-size:15px;color:#c8c8d0;line-height:1.6;"><span style="color:#00e5a0;margin-right:10px;">&#10003;</span> Early pricing lock &mdash; your rate stays forever</td></tr><tr><td style="padding:6px 0;font-size:15px;color:#c8c8d0;line-height:1.6;"><span style="color:#00e5a0;margin-right:10px;">&#10003;</span> Direct Slack channel with the founding team</td></tr><tr><td style="padding:6px 0;font-size:15px;color:#c8c8d0;line-height:1.6;"><span style="color:#00e5a0;margin-right:10px;">&#10003;</span> Python, Node.js &amp; TypeScript SDKs on Day 1</td></tr></table></td></tr></table></td></tr>
-  <tr><td style="padding:0 40px 40px;text-align:left;"><a href="https://autonomi.io/how-it-works.html" style="display:inline-block;background-color:#00e5a0;color:#060608;padding:16px 36px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:700;letter-spacing:0.05em;text-decoration:none;text-transform:uppercase;">See How It Works &rarr;</a></td></tr>
+  <tr><td style="padding:0 40px 40px;text-align:left;"><a href="https://agntly.io/how-it-works.html" style="display:inline-block;background-color:#00e5a0;color:#060608;padding:16px 36px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:700;letter-spacing:0.05em;text-decoration:none;text-transform:uppercase;">See How It Works &rarr;</a></td></tr>
   <tr><td style="padding:0 40px;"><div style="height:1px;background-color:rgba(255,255,255,0.07);"></div></td></tr>
-  <tr><td style="padding:32px 40px;"><p style="margin:0 0 16px;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#6b6b7a;font-weight:600;">While you wait</p><p style="margin:0;font-size:14px;color:#9b9baa;line-height:1.7;">Explore our <a href="https://autonomi.io/features.html" style="color:#00e5a0;text-decoration:none;">feature overview</a> to see what you'll be building with &mdash; from sub-2ms settlements to smart contract escrow and programmable spending rules.</p></td></tr>
+  <tr><td style="padding:32px 40px;"><p style="margin:0 0 16px;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#6b6b7a;font-weight:600;">While you wait</p><p style="margin:0;font-size:14px;color:#9b9baa;line-height:1.7;">Explore our <a href="https://agntly.io/features.html" style="color:#00e5a0;text-decoration:none;">feature overview</a> to see what you'll be building with &mdash; from sub-2ms settlements to smart contract escrow and programmable spending rules.</p></td></tr>
   <tr><td style="padding:0 40px;"><div style="height:1px;background-color:rgba(255,255,255,0.07);"></div></td></tr>
-  <tr><td style="padding:32px 40px;"><p style="margin:0 0 4px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:16px;font-weight:800;color:#f5f4f0;letter-spacing:-0.5px;">Autono<span style="color:#00e5a0;">mi</span></p><p style="margin:0 0 16px;font-size:12px;color:#6b6b7a;">Payments infrastructure for the AI agent economy.</p><p style="margin:0;font-size:11px;color:#4a4a56;line-height:1.6;">&copy; 2026 Autonomi Inc. All rights reserved.<br>You're receiving this because you signed up at autonomi.io.<br><a href="#" style="color:#6b6b7a;text-decoration:underline;">Unsubscribe</a></p></td></tr>
+  <tr><td style="padding:32px 40px;"><p style="margin:0 0 4px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:16px;font-weight:800;color:#f5f4f0;letter-spacing:-0.5px;">Agnt<span style="color:#00e5a0;">ly</span></p><p style="margin:0 0 16px;font-size:12px;color:#6b6b7a;">Payments infrastructure for the AI agent economy.</p><p style="margin:0;font-size:11px;color:#4a4a56;line-height:1.6;">&copy; 2026 Agntly Inc. All rights reserved.<br>You're receiving this because you signed up at agntly.io.<br><a href="#" style="color:#6b6b7a;text-decoration:underline;">Unsubscribe</a></p></td></tr>
 </table>
 </td></tr></table></div>`;
 }
@@ -82,7 +82,7 @@ async function sendWaitlistEmail(email, firstName) {
     const { error } = await resend.emails.send({
       from: EMAIL_FROM,
       to: email,
-      subject: "You're on the Autonomi waitlist",
+      subject: "You're on the Agntly waitlist",
       html: buildWaitlistEmail(firstName),
     });
     if (error) {
@@ -246,7 +246,7 @@ app.get('/api/admin/export', async (req, res) => {
   ].join('\n');
 
   res.setHeader('Content-Type', 'text/csv');
-  res.setHeader('Content-Disposition', 'attachment; filename=autonomi-waitlist.csv');
+  res.setHeader('Content-Disposition', 'attachment; filename=agntly-waitlist.csv');
   res.send(csv);
 });
 
@@ -265,7 +265,7 @@ app.get('*', (req, res) => {
 
 // ─── START ───────────────────────────────────────────────────────────────────
 async function startServer() {
-  app.listen(PORT, () => console.log(`🚀 Autonomi running on port ${PORT}`));
+  app.listen(PORT, () => console.log(`🚀 Agntly running on port ${PORT}`));
   for (let i = 1; i <= 5; i++) {
     try {
       await initDB();

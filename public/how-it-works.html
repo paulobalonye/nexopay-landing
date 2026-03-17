@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<title>How It Works — Autonomi</title>
-<meta name="description" content="Learn how Autonomi works — from API key to your first agent-to-agent transaction in under 30 minutes.">
-<meta property="og:title" content="How It Works — Autonomi">
+<title>How It Works — Agntly</title>
+<meta name="description" content="Learn how Agntly works — from API key to your first agent-to-agent transaction in under 30 minutes.">
+<meta property="og:title" content="How It Works — Agntly">
 <meta property="og:description" content="Four steps to autonomous payments. Create wallets, set spending rules, let agents transact, monitor everything.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#060608">
@@ -53,14 +53,14 @@
 <div class="page-header">
   <div class="section-tag">How It Works</div>
   <h1 class="page-title">Four steps to<br>autonomous <span class="italic">payments.</span></h1>
-  <p class="page-subtitle">From API key to your first agent-to-agent transaction in under 30 minutes. Here's exactly how Autonomi works under the hood.</p>
+  <p class="page-subtitle">From API key to your first agent-to-agent transaction in under 30 minutes. Here's exactly how Agntly works under the hood.</p>
 </div>
 
 <!-- FLOW DIAGRAM -->
 <div class="flow-diagram reveal">
   <div class="flow-node"><div class="flow-box">Your Agent</div><div class="flow-label">Initiator</div></div>
   <div class="flow-arrow">→</div>
-  <div class="flow-node"><div class="flow-box highlight">Autonomi API</div><div class="flow-label">Rules Engine</div></div>
+  <div class="flow-node"><div class="flow-box highlight">Agntly API</div><div class="flow-label">Rules Engine</div></div>
   <div class="flow-arrow">→</div>
   <div class="flow-node"><div class="flow-box">Smart Contract</div><div class="flow-label">Escrow Layer</div></div>
   <div class="flow-arrow">→</div>
@@ -87,7 +87,7 @@
     <div class="step-num-big">02</div>
     <div class="step-body">
       <h3>Configure spending rules</h3>
-      <p>Every wallet runs through Autonomi's rules engine before any transaction clears. Set daily limits, per-transaction caps, whitelisted recipients, and category locks. Add a kill switch that lets you freeze the wallet instantly from the dashboard or via API call.</p>
+      <p>Every wallet runs through Agntly's rules engine before any transaction clears. Set daily limits, per-transaction caps, whitelisted recipients, and category locks. Add a kill switch that lets you freeze the wallet instantly from the dashboard or via API call.</p>
       <div class="step-detail">
         <span class="chip active">Daily Spend Limit</span>
         <span class="chip active">Per-TX Cap</span>
@@ -101,7 +101,7 @@
     <div class="step-num-big">03</div>
     <div class="step-body">
       <h3>Agents transact autonomously</h3>
-      <p>Your agent calls <code style="color:var(--accent);font-size:12px">POST /payments</code> to send USDC to any other Autonomi wallet. The rules engine validates in microseconds, the smart contract handles escrow if needed, and settlement lands on Base L2 — all within 2ms on average. Your agent never touches a private key.</p>
+      <p>Your agent calls <code style="color:var(--accent);font-size:12px">POST /payments</code> to send USDC to any other Agntly wallet. The rules engine validates in microseconds, the smart contract handles escrow if needed, and settlement lands on Base L2 — all within 2ms on average. Your agent never touches a private key.</p>
       <div class="step-detail">
         <span class="chip active">POST /payments</span>
         <span class="chip">Sub-2ms Settlement</span>
@@ -130,10 +130,10 @@
 <div class="content-section">
   <div class="section-tag">FAQ</div>
   <h2 style="font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.02em;margin-bottom:48px;">Common questions.</h2>
-  <div class="faq-item reveal"><div class="faq-q">Do my agents ever hold private keys?</div><div class="faq-a">Never. All cryptographic keys are managed by AWS KMS hardware security modules. Your agents interact with Autonomi via API — Autonomi handles all on-chain signing securely.</div></div>
+  <div class="faq-item reveal"><div class="faq-q">Do my agents ever hold private keys?</div><div class="faq-a">Never. All cryptographic keys are managed by AWS KMS hardware security modules. Your agents interact with Agntly via API — Agntly handles all on-chain signing securely.</div></div>
   <div class="faq-item reveal"><div class="faq-q">What currency do agents transact in?</div><div class="faq-a">USDC — a regulated, USD-pegged stablecoin issued by Circle. No price volatility, no crypto complexity. It behaves like dollars, settles like crypto.</div></div>
-  <div class="faq-item reveal"><div class="faq-q">What blockchain does Autonomi use?</div><div class="faq-a">Base — an Ethereum Layer 2 chain backed by Coinbase. It offers transaction fees under $0.001, sub-second finality, and full EVM compatibility. We chose it specifically for the agent use case.</div></div>
-  <div class="faq-item reveal"><div class="faq-q">Can I integrate Autonomi with LangChain, AutoGen, or CrewAI?</div><div class="faq-a">Yes. Autonomi is framework-agnostic. If your agent can make an HTTP request, it can use Autonomi. We ship Day 1 SDKs for Python, Node.js, and TypeScript that work natively with all major agent frameworks.</div></div>
+  <div class="faq-item reveal"><div class="faq-q">What blockchain does Agntly use?</div><div class="faq-a">Base — an Ethereum Layer 2 chain backed by Coinbase. It offers transaction fees under $0.001, sub-second finality, and full EVM compatibility. We chose it specifically for the agent use case.</div></div>
+  <div class="faq-item reveal"><div class="faq-q">Can I integrate Agntly with LangChain, AutoGen, or CrewAI?</div><div class="faq-a">Yes. Agntly is framework-agnostic. If your agent can make an HTTP request, it can use Agntly. We ship Day 1 SDKs for Python, Node.js, and TypeScript that work natively with all major agent frameworks.</div></div>
   <div class="faq-item reveal"><div class="faq-q">What happens if an agent goes rogue or gets hacked?</div><div class="faq-a">Spending rules cap the blast radius. A compromised agent can only spend up to its configured daily limit. You can freeze any wallet instantly via API or dashboard. Anomaly detection alerts you to unusual patterns in real time.</div></div>
 </div>
 
