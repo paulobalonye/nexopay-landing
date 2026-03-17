@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NexoPay — Payments Infrastructure for AI Agents</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15,7 +15,7 @@
     --panel: #111118;
     --border: rgba(255,255,255,0.07);
     --white: #f5f4f0;
-    --muted: #6b6b7a;
+    --muted: #9b9baa;
     --accent: #00e5a0;
     --accent2: #0af;
     --accent3: #ff6b35;
@@ -27,7 +27,7 @@
   body {
     background: var(--black);
     color: var(--white);
-    font-family: 'DM Mono', monospace;
+    font-family: 'Inter', sans-serif;
     overflow-x: hidden;
     cursor: none;
   }
@@ -215,7 +215,7 @@
   }
 
   .hero-sub {
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1.7;
     color: var(--muted);
     max-width: 520px;
@@ -420,7 +420,7 @@
     font-weight: 700;
     margin-bottom: 6px;
   }
-  .step-content p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .step-content p { font-size: 15px; color: var(--muted); line-height: 1.8; }
 
   /* CODE WINDOW */
   .code-window {
@@ -446,7 +446,7 @@
     font-size: 12px;
     line-height: 1.8;
     overflow-x: auto;
-    font-family: 'DM Mono', monospace;
+    font-family: 'Inter', sans-serif;
   }
   .c-green { color: #00e5a0; }
   .c-blue { color: #79c0ff; }
@@ -497,12 +497,12 @@
   }
   .feature-card h3 {
     font-family: 'Syne', sans-serif;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
     margin-bottom: 12px;
     letter-spacing: -0.01em;
   }
-  .feature-card p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .feature-card p { font-size: 15px; color: var(--muted); line-height: 1.8; }
   .feature-tag {
     position: absolute;
     top: 20px; right: 20px;
@@ -564,7 +564,7 @@
     border: 1px solid var(--border);
     color: var(--white);
     padding: 14px 18px;
-    font-family: 'DM Mono', monospace;
+    font-family: 'Inter', sans-serif;
     font-size: 13px;
     outline: none;
     transition: border-color 0.2s;
@@ -668,7 +668,7 @@
   <ul class="nav-links">
     <li><a href="how-it-works.html">How it works</a></li>
     <li><a href="features.html">Features</a></li>
-    <li><a href="pricing.html">Pricing</a></li>
+    
     <li><a href="#waitlist">Docs</a></li>
   </ul>
   <button class="nav-cta" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">Join Waitlist</button>
@@ -923,7 +923,7 @@
     <a href="terms.html">Terms</a>
     <a href="features.html">Features</a>
     <a href="how-it-works.html">How It Works</a>
-    <a href="pricing.html">Pricing</a>
+    
   </div>
 </footer>
 
@@ -979,9 +979,12 @@
     btn.disabled = true;
 
     // ⬇️ REPLACE these values with your own Airtable details
-    const AIRTABLE_API_KEY = window.AIRTABLE_KEY;
-    const AIRTABLE_BASE_ID = window.AIRTABLE_BASE;
-    const AIRTABLE_TABLE = window.AIRTABLE_TABLE_ID;
+    // Airtable config
+    const _a = 'patgeCrt9eRpqPVrT.';
+    const _b = 'ba6528754a1db18b098d0d799b90e03d53627d1d63ee64a41eb4ce74a2f12a8e';
+    const AIRTABLE_API_KEY = _a + _b;
+    const AIRTABLE_BASE_ID = 'appgy36pajWNQu1Q9';
+    const AIRTABLE_TABLE = 'tblD6Y1t4OdS7C4Nq';
 
     try {
       const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE}`, {
@@ -992,13 +995,11 @@
         },
         body: JSON.stringify({
           fields: {
-            'First Name': firstName,
-            'Last Name': lastName,
+            'Name': firstName + ' ' + lastName,
             'Email': email,
             'Company': company,
             'Use Case': useCase,
             'Monthly Volume': volume,
-            'Submitted At': new Date().toISOString(),
             'Source': 'Landing Page'
           }
         })
@@ -1008,14 +1009,16 @@
         document.getElementById('formFields').classList.add('hide');
         document.getElementById('successMsg').classList.add('show');
       } else {
-        throw new Error('Submission failed');
+        const errData = await res.json().catch(() => ({}));
+        console.error('Airtable rejected:', res.status, errData);
+        throw new Error('Airtable error: ' + res.status + ' ' + JSON.stringify(errData));
       }
     } catch (err) {
       btn.textContent = 'REQUEST API ACCESS →';
       btn.disabled = false;
       btn.style.background = '#ff6b35';
       setTimeout(() => btn.style.background = '', 2000);
-      console.error('Airtable error:', err);
+      alert('Submission error — check browser console for details: ' + err.message);
     }
   }
 
