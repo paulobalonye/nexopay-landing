@@ -994,14 +994,17 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          fields: {
-            'Name': firstName + ' ' + lastName,
-            'Email': email,
-            'Company': company,
-            'Use Case': useCase,
-            'Monthly Volume': volume,
-            'Source': 'Landing Page'
-          }
+          records: [{
+            fields: {
+              'Name': firstName + ' ' + lastName,
+              'Email': email,
+              'Company': company,
+              'Use Case': useCase,
+              'Monthly Volume': volume,
+              'Source': 'Landing Page'
+            }
+          }],
+          typecast: true
         })
       });
 
