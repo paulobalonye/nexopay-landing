@@ -960,7 +960,7 @@
   }, { threshold: 0.5 });
   document.querySelectorAll('.counter').forEach(el => observer.observe(el));
 
-  // Airtable waitlist submission
+  // Waitlist form submission
   async function handleSubmit() {
     const firstName = document.getElementById('firstName').value.trim();
     const lastName = document.getElementById('lastName').value.trim();
@@ -979,50 +979,37 @@
     btn.textContent = 'Submitting...';
     btn.disabled = true;
 
-    // ⬇️ REPLACE these values with your own Airtable details
-    // Airtable config
-    const _a = 'patgeCrt9eRpqPVrT.';
-    const _b = 'ba6528754a1db18b098d0d799b90e03d53627d1d63ee64a41eb4ce74a2f12a8e';
-    const AIRTABLE_API_KEY = _a + _b;
-    const AIRTABLE_BASE_ID = 'appgy36pajWNQu1Q9';
-    const AIRTABLE_TABLE = 'tblD6Y1t4OdS7C4Nq';
-
     try {
-      const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE}`, {
+      const res = await fetch('/api/waitlist', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          records: [{
-            fields: {
-              'Name': firstName + ' ' + lastName,
-              'Email': email,
-              'Company': company,
-              'Use Case': useCase,
-              'Monthly Volume': volume,
-              'Source': 'Landing Page'
-            }
-          }],
-          typecast: true
+          name: firstName + ' ' + lastName,
+          email,
+          company,
+          use_case: useCase,
+          monthly_volume: volume
         })
       });
-
+      const data = await res.json();
       if (res.ok) {
         document.getElementById('formFields').classList.add('hide');
         document.getElementById('successMsg').classList.add('show');
+      } else if (res.status === 409) {
+        btn.textContent = 'REQUEST API ACCESS →';
+        btn.disabled = false;
+        btn.style.background = '#ff6b35';
+        setTimeout(() => btn.style.background = '', 2000);
+        alert('This email is already on the waitlist!');
       } else {
-        const errData = await res.json().catch(() => ({}));
-        console.error('Airtable rejected:', res.status, errData);
-        throw new Error('Airtable error: ' + res.status + ' ' + JSON.stringify(errData));
+        throw new Error(data.error || 'Submission failed');
       }
     } catch (err) {
       btn.textContent = 'REQUEST API ACCESS →';
       btn.disabled = false;
       btn.style.background = '#ff6b35';
       setTimeout(() => btn.style.background = '', 2000);
-      alert('Submission error — check browser console for details: ' + err.message);
+      alert('Error: ' + err.message);
     }
   }
 
