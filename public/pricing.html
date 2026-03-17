@@ -2,26 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pricing — NexoPay</title>
+<title>Pricing — Autonomi</title>
 <link rel="stylesheet" href="shared.css">
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap">
 <style>
 .pricing-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin:0 0 80px; }
 .plan { background:var(--black);padding:48px 40px;position:relative;transition:background 0.3s; }
 .plan:hover { background:var(--panel); }
 .plan.featured { background:var(--panel);border:1px solid rgba(0,229,160,0.3); }
-.plan.featured::before { content:'Most Popular';position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--black);font-family:'Syne',sans-serif;font-weight:700;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;padding:5px 20px; }
+.plan.featured::before { content:'Most Popular';position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--black);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;padding:5px 20px; }
 .plan-name { font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:16px; }
-.plan-price { font-family:'Syne',sans-serif;font-size:56px;font-weight:800;letter-spacing:-0.04em;line-height:1;margin-bottom:4px; }
+.plan-price { font-family:'Space Grotesk',sans-serif;font-size:56px;font-weight:800;letter-spacing:-0.04em;line-height:1;margin-bottom:4px; }
 .plan-price .currency { font-size:24px;vertical-align:top;margin-top:10px;display:inline-block; }
-.plan-price .period { font-size:16px;font-weight:400;color:var(--muted);font-family:'DM Mono',monospace; }
+.plan-price .period { font-size:16px;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif; }
 .plan-desc { font-size:13px;color:var(--muted);margin-bottom:36px;line-height:1.7;min-height:56px; }
 .plan-features { display:flex;flex-direction:column;gap:12px;margin-bottom:40px; }
 .plan-feature { display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);line-height:1.5; }
 .plan-feature::before { content:'✓';color:var(--accent);flex-shrink:0;font-size:12px;margin-top:1px; }
 .plan-feature.no { color:rgba(255,255,255,0.2); }
 .plan-feature.no::before { content:'—';color:rgba(255,255,255,0.15); }
-.plan-btn { display:block;text-align:center;padding:15px;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.05em;text-decoration:none;border:1px solid var(--border);color:var(--white);transition:all 0.2s; }
+.plan-btn { display:block;text-align:center;padding:15px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.05em;text-decoration:none;border:1px solid var(--border);color:var(--white);transition:all 0.2s; }
 .plan-btn:hover { border-color:var(--accent);color:var(--accent); }
 .plan-btn.primary-btn { background:var(--accent);color:var(--black);border-color:var(--accent); }
 .plan-btn.primary-btn:hover { background:#fff; }
@@ -31,18 +30,31 @@
 .tx-row:last-child { border-bottom:none; }
 .tx-cell { padding:18px 24px;font-size:13px;border-right:1px solid var(--border); }
 .tx-cell:last-child { border-right:none; }
-.tx-cell.head { font-family:'Syne',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.05em;color:var(--white);background:var(--panel); }
+.tx-cell.head { font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.05em;color:var(--white);background:var(--panel); }
 .tx-cell.accent { color:var(--accent);font-weight:500; }
 .tx-cell { color:var(--muted); }
 .faq-section { padding:80px 48px; }
 .faq-item { padding:28px 0;border-bottom:1px solid var(--border); }
 .faq-item:last-child { border-bottom:none; }
-.faq-q { font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:10px; }
+.faq-q { font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;margin-bottom:10px; }
 .faq-a { font-size:13px;color:var(--muted);line-height:1.85; }
 .cta-band { padding:100px 48px;text-align:center;background:var(--panel);border-top:1px solid var(--border); }
-.cta-band h2 { font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-0.03em;margin-bottom:20px; }
+.cta-band h2 { font-family:'Space Grotesk',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-0.03em;margin-bottom:20px; }
 .cta-band p { font-size:15px;color:var(--muted);margin-bottom:40px; }
 .cta-actions { display:flex;gap:16px;justify-content:center; }
+@media (max-width: 768px) {
+  .pricing-grid { grid-template-columns:1fr; }
+  .plan { padding:36px 24px; }
+  .plan.featured { margin-top:24px; }
+  .tx-section { padding:48px 20px; }
+  .tx-row { grid-template-columns:1fr; }
+  .tx-cell { border-right:none;border-bottom:1px solid var(--border); }
+  .tx-cell.head { font-size:11px; }
+  .faq-section { padding:48px 20px; }
+  .cta-band { padding:64px 20px; }
+  .cta-actions { flex-direction:column;align-items:center; }
+  .cta-actions .btn-primary, .cta-actions .btn-ghost { width:100%;text-align:center; }
+}
 </style>
 </head>
 <body>
@@ -113,7 +125,7 @@
   <!-- TX PRICING -->
   <div class="tx-section reveal">
     <div class="section-tag">Transaction Fees</div>
-    <h2 style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;letter-spacing:-0.02em;">Pay per transaction. That's it.</h2>
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:800;letter-spacing:-0.02em;">Pay per transaction. That's it.</h2>
     <div class="tx-table">
       <div class="tx-row">
         <div class="tx-cell head">Transaction Type</div>
@@ -152,11 +164,11 @@
 <!-- PRICING FAQ -->
 <div class="faq-section">
   <div class="section-tag">FAQ</div>
-  <h2 style="font-family:'Syne',sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.02em;margin-bottom:48px;">Pricing questions.</h2>
+  <h2 style="font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.02em;margin-bottom:48px;">Pricing questions.</h2>
   <div class="faq-item reveal"><div class="faq-q">Is there a free trial for Builder?</div><div class="faq-a">Yes — every new account starts with $50 in free transaction credits, no credit card required. The Sandbox plan is always free.</div></div>
   <div class="faq-item reveal"><div class="faq-q">What counts as one "transaction"?</div><div class="faq-a">Any agent-to-agent payment, escrow release, or withdrawal. Wallet creation, balance checks, and rule updates are all free API calls.</div></div>
   <div class="faq-item reveal"><div class="faq-q">Can I switch plans anytime?</div><div class="faq-a">Yes. Upgrade or downgrade at any time. No lock-in periods on Builder. Enterprise contracts are annual.</div></div>
-  <div class="faq-item reveal"><div class="faq-q">What currency do I pay NexoPay in?</div><div class="faq-a">Monthly subscription fees are billed in USD to a credit card or invoice. Transaction fees are deducted from your org wallet balance in USDC.</div></div>
+  <div class="faq-item reveal"><div class="faq-q">What currency do I pay Autonomi in?</div><div class="faq-a">Monthly subscription fees are billed in USD to a credit card or invoice. Transaction fees are deducted from your org wallet balance in USDC.</div></div>
 </div>
 
 <div class="cta-band reveal">

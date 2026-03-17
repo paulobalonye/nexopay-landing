@@ -8,11 +8,11 @@ const PORT = process.env.PORT || 3000;
 // Postgres connection — Railway injects DATABASE_URL automatically
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  connectionTimeoutMillis: 10000,
 });
 
 // Admin password — set via Railway env var ADMIN_PASSWORD
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'nexopay2026';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'autonomi2026';
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -114,7 +114,7 @@ app.get('/api/admin/export', async (req, res) => {
   ].join('\n');
 
   res.setHeader('Content-Type', 'text/csv');
-  res.setHeader('Content-Disposition', 'attachment; filename=nexopay-waitlist.csv');
+  res.setHeader('Content-Disposition', 'attachment; filename=autonomi-waitlist.csv');
   res.send(csv);
 });
 
@@ -132,9 +132,17 @@ app.get('*', (req, res) => {
 });
 
 // ─── START ───────────────────────────────────────────────────────────────────
-initDB().then(() => {
-  app.listen(PORT, () => console.log(`🚀 NexoPay running on port ${PORT}`));
-}).catch(err => {
-  console.error('Failed to init DB:', err);
-  process.exit(1);
-});
+async function startServer() {
+  app.listen(PORT, () => console.log(`🚀 Autonomi running on port ${PORT}`));
+  for (let i = 1; i <= 5; i++) {
+    try {
+      await initDB();
+      return;
+    } catch (err) {
+      console.error(`DB init attempt ${i}/5 failed:`, err.message);
+      if (i < 5) await new Promise(r => setTimeout(r, 3000 * i));
+    }
+  }
+  console.error('All DB init attempts failed. Server running without DB.');
+}
+startServer();

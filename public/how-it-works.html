@@ -2,45 +2,59 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How It Works — NexoPay</title>
+<title>How It Works — Autonomi</title>
 <link rel="stylesheet" href="shared.css">
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap">
 <style>
 .step-row { display:grid;grid-template-columns:80px 1fr;gap:32px;padding:56px 0;border-bottom:1px solid var(--border);align-items:start; }
 .step-row:last-child { border-bottom:none; }
-.step-num-big { font-family:'Syne',sans-serif;font-size:72px;font-weight:800;color:rgba(255,255,255,0.06);line-height:1;letter-spacing:-0.04em; }
-.step-body h3 { font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-0.02em;margin-bottom:12px; }
+.step-num-big { font-family:'Space Grotesk',sans-serif;font-size:72px;font-weight:800;color:rgba(255,255,255,0.06);line-height:1;letter-spacing:-0.04em; }
+.step-body h3 { font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:800;letter-spacing:-0.02em;margin-bottom:12px; }
 .step-body p { font-size:14px;color:var(--muted);line-height:1.85;max-width:600px;margin-bottom:24px; }
 .step-detail { display:flex;flex-wrap:wrap;gap:10px;margin-top:8px; }
 .chip { font-size:11px;letter-spacing:0.08em;padding:6px 14px;border:1px solid var(--border);color:var(--muted);background:rgba(255,255,255,0.02); }
 .chip.active { border-color:rgba(0,229,160,0.3);color:var(--accent);background:rgba(0,229,160,0.05); }
 .flow-diagram { margin:80px 48px;border:1px solid var(--border);background:var(--panel);padding:56px;display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap; }
 .flow-node { text-align:center;padding:0 24px; }
-.flow-box { background:var(--black);border:1px solid var(--border);padding:18px 24px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:8px;white-space:nowrap; }
+.flow-box { background:var(--black);border:1px solid var(--border);padding:18px 24px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;margin-bottom:8px;white-space:nowrap; }
 .flow-box.highlight { border-color:var(--accent);background:rgba(0,229,160,0.06);color:var(--accent); }
 .flow-label { font-size:10px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase; }
 .flow-arrow { font-size:24px;color:var(--accent);padding:0 8px;align-self:center;margin-bottom:28px; }
 .faq-item { padding:32px 0;border-bottom:1px solid var(--border); }
-.faq-q { font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin-bottom:12px;cursor:none; }
+.faq-q { font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;margin-bottom:12px;cursor:none; }
 .faq-a { font-size:13px;color:var(--muted);line-height:1.85; }
 .cta-band { padding:100px 48px;text-align:center;background:var(--panel);border-top:1px solid var(--border);border-bottom:1px solid var(--border); }
-.cta-band h2 { font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,56px);font-weight:800;letter-spacing:-0.03em;margin-bottom:20px; }
+.cta-band h2 { font-family:'Space Grotesk',sans-serif;font-size:clamp(32px,5vw,56px);font-weight:800;letter-spacing:-0.03em;margin-bottom:20px; }
 .cta-band p { font-size:15px;color:var(--muted);margin-bottom:40px; }
 .cta-actions { display:flex;gap:16px;justify-content:center; }
+@media (max-width: 768px) {
+  .step-row { grid-template-columns:48px 1fr;gap:16px;padding:32px 0; }
+  .step-num-big { font-size:48px; }
+  .step-body h3 { font-size:20px; }
+  .flow-diagram { margin:40px 20px;padding:28px;flex-direction:column;gap:12px; }
+  .flow-arrow { transform:rotate(90deg); }
+  .cta-band { padding:64px 20px; }
+  .cta-actions { flex-direction:column;align-items:center; }
+  .cta-actions .btn-primary, .cta-actions .btn-ghost { width:100%;text-align:center; }
+}
+@media (max-width: 480px) {
+  .step-row { grid-template-columns:1fr;gap:12px; }
+  .step-num-big { font-size:36px; }
+  .flow-diagram { margin:24px 16px;padding:20px; }
+}
 </style>
 </head>
 <body>
 <div class="page-header">
   <div class="section-tag">How It Works</div>
   <h1 class="page-title">Four steps to<br>autonomous <span class="italic">payments.</span></h1>
-  <p class="page-subtitle">From API key to your first agent-to-agent transaction in under 30 minutes. Here's exactly how NexoPay works under the hood.</p>
+  <p class="page-subtitle">From API key to your first agent-to-agent transaction in under 30 minutes. Here's exactly how Autonomi works under the hood.</p>
 </div>
 
 <!-- FLOW DIAGRAM -->
 <div class="flow-diagram reveal">
   <div class="flow-node"><div class="flow-box">Your Agent</div><div class="flow-label">Initiator</div></div>
   <div class="flow-arrow">→</div>
-  <div class="flow-node"><div class="flow-box highlight">NexoPay API</div><div class="flow-label">Rules Engine</div></div>
+  <div class="flow-node"><div class="flow-box highlight">Autonomi API</div><div class="flow-label">Rules Engine</div></div>
   <div class="flow-arrow">→</div>
   <div class="flow-node"><div class="flow-box">Smart Contract</div><div class="flow-label">Escrow Layer</div></div>
   <div class="flow-arrow">→</div>
@@ -67,7 +81,7 @@
     <div class="step-num-big">02</div>
     <div class="step-body">
       <h3>Configure spending rules</h3>
-      <p>Every wallet runs through NexoPay's rules engine before any transaction clears. Set daily limits, per-transaction caps, whitelisted recipients, and category locks. Add a kill switch that lets you freeze the wallet instantly from the dashboard or via API call.</p>
+      <p>Every wallet runs through Autonomi's rules engine before any transaction clears. Set daily limits, per-transaction caps, whitelisted recipients, and category locks. Add a kill switch that lets you freeze the wallet instantly from the dashboard or via API call.</p>
       <div class="step-detail">
         <span class="chip active">Daily Spend Limit</span>
         <span class="chip active">Per-TX Cap</span>
@@ -81,7 +95,7 @@
     <div class="step-num-big">03</div>
     <div class="step-body">
       <h3>Agents transact autonomously</h3>
-      <p>Your agent calls <code style="color:var(--accent);font-size:12px">POST /payments</code> to send USDC to any other NexoPay wallet. The rules engine validates in microseconds, the smart contract handles escrow if needed, and settlement lands on Base L2 — all within 2ms on average. Your agent never touches a private key.</p>
+      <p>Your agent calls <code style="color:var(--accent);font-size:12px">POST /payments</code> to send USDC to any other Autonomi wallet. The rules engine validates in microseconds, the smart contract handles escrow if needed, and settlement lands on Base L2 — all within 2ms on average. Your agent never touches a private key.</p>
       <div class="step-detail">
         <span class="chip active">POST /payments</span>
         <span class="chip">Sub-2ms Settlement</span>
@@ -109,11 +123,11 @@
 <!-- FAQ -->
 <div class="content-section">
   <div class="section-tag">FAQ</div>
-  <h2 style="font-family:'Syne',sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.02em;margin-bottom:48px;">Common questions.</h2>
-  <div class="faq-item reveal"><div class="faq-q">Do my agents ever hold private keys?</div><div class="faq-a">Never. All cryptographic keys are managed by AWS KMS hardware security modules. Your agents interact with NexoPay via API — NexoPay handles all on-chain signing securely.</div></div>
+  <h2 style="font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.02em;margin-bottom:48px;">Common questions.</h2>
+  <div class="faq-item reveal"><div class="faq-q">Do my agents ever hold private keys?</div><div class="faq-a">Never. All cryptographic keys are managed by AWS KMS hardware security modules. Your agents interact with Autonomi via API — Autonomi handles all on-chain signing securely.</div></div>
   <div class="faq-item reveal"><div class="faq-q">What currency do agents transact in?</div><div class="faq-a">USDC — a regulated, USD-pegged stablecoin issued by Circle. No price volatility, no crypto complexity. It behaves like dollars, settles like crypto.</div></div>
-  <div class="faq-item reveal"><div class="faq-q">What blockchain does NexoPay use?</div><div class="faq-a">Base — an Ethereum Layer 2 chain backed by Coinbase. It offers transaction fees under $0.001, sub-second finality, and full EVM compatibility. We chose it specifically for the agent use case.</div></div>
-  <div class="faq-item reveal"><div class="faq-q">Can I integrate NexoPay with LangChain, AutoGen, or CrewAI?</div><div class="faq-a">Yes. NexoPay is framework-agnostic. If your agent can make an HTTP request, it can use NexoPay. We ship Day 1 SDKs for Python, Node.js, and TypeScript that work natively with all major agent frameworks.</div></div>
+  <div class="faq-item reveal"><div class="faq-q">What blockchain does Autonomi use?</div><div class="faq-a">Base — an Ethereum Layer 2 chain backed by Coinbase. It offers transaction fees under $0.001, sub-second finality, and full EVM compatibility. We chose it specifically for the agent use case.</div></div>
+  <div class="faq-item reveal"><div class="faq-q">Can I integrate Autonomi with LangChain, AutoGen, or CrewAI?</div><div class="faq-a">Yes. Autonomi is framework-agnostic. If your agent can make an HTTP request, it can use Autonomi. We ship Day 1 SDKs for Python, Node.js, and TypeScript that work natively with all major agent frameworks.</div></div>
   <div class="faq-item reveal"><div class="faq-q">What happens if an agent goes rogue or gets hacked?</div><div class="faq-a">Spending rules cap the blast radius. A compromised agent can only spend up to its configured daily limit. You can freeze any wallet instantly via API or dashboard. Anomaly detection alerts you to unusual patterns in real time.</div></div>
 </div>
 

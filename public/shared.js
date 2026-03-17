@@ -1,4 +1,4 @@
-// NexoPay Shared Nav & Footer injector
+// Autonomi Shared Nav & Footer injector
 const NAV_HTML = `
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
@@ -11,6 +11,7 @@ const NAV_HTML = `
     <li><a href="index.html#waitlist">Docs</a></li>
   </ul>
   <a href="index.html#waitlist" class="nav-cta">Join Waitlist</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>`;
 
 const FOOTER_HTML = `
@@ -42,7 +43,7 @@ const FOOTER_HTML = `
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2026 NexoPay Inc. All rights reserved.</span>
+    <span>© 2026 Autonomi Inc. All rights reserved.</span>
     <div class="footer-socials">
       <a href="#">Twitter/X</a>
       <a href="#">LinkedIn</a>
@@ -74,6 +75,21 @@ const CURSOR_JS = `
     el.style.transition='opacity 0.55s ease, transform 0.55s ease';
     revealObserver.observe(el);
   });
+  // Hamburger menu toggle
+  var toggle = document.getElementById('navToggle');
+  var links = document.querySelector('.nav-links');
+  if (toggle && links) {
+    toggle.addEventListener('click', function() {
+      toggle.classList.toggle('active');
+      links.classList.toggle('open');
+    });
+    links.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        toggle.classList.remove('active');
+        links.classList.remove('open');
+      });
+    });
+  }
 `;
 
 document.addEventListener('DOMContentLoaded', () => {

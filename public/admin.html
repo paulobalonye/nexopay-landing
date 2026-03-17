@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NexoPay — Admin Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Autonomi — Admin Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -11,7 +13,7 @@
   --white: #f5f4f0; --muted: #9b9baa; --accent: #00e5a0; --red: #ff4757;
   --yellow: #ffd32a;
 }
-body { background: var(--black); color: var(--white); font-family: 'Inter', sans-serif; min-height: 100vh; }
+body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
 
 /* LOGIN */
 .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
@@ -20,19 +22,19 @@ body { background: var(--black); color: var(--white); font-family: 'Inter', sans
   padding: 48px; width: 380px; position: relative;
 }
 .login-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), #0af); }
-.login-logo { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+.login-logo { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 8px; }
 .login-logo span { color: var(--accent); }
 .login-sub { font-size: 13px; color: var(--muted); margin-bottom: 36px; }
 .field-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: block; }
 .field-input {
   width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
-  color: var(--white); padding: 14px 16px; font-family: 'Inter', sans-serif;
+  color: var(--white); padding: 14px 16px; font-family: 'DM Sans', sans-serif;
   font-size: 14px; outline: none; transition: border-color 0.2s; margin-bottom: 20px;
 }
 .field-input:focus { border-color: var(--accent); }
 .login-btn {
   width: 100%; background: var(--accent); color: var(--black); padding: 15px;
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
+  font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px;
   letter-spacing: 0.06em; border: none; cursor: pointer; transition: all 0.2s;
 }
 .login-btn:hover { background: white; }
@@ -45,19 +47,19 @@ body { background: var(--black); color: var(--white); font-family: 'Inter', sans
   padding: 18px 40px; display: flex; justify-content: space-between; align-items: center;
   position: sticky; top: 0; z-index: 100;
 }
-.topbar-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; }
+.topbar-logo { font-family: 'Space Grotesk', sans-serif; font-weight: 800; font-size: 18px; }
 .topbar-logo span { color: var(--accent); }
 .topbar-right { display: flex; gap: 12px; align-items: center; }
 .badge { background: rgba(0,229,160,0.1); border: 1px solid rgba(0,229,160,0.2); color: var(--accent); padding: 5px 14px; font-size: 12px; font-weight: 600; }
 .btn-sm {
-  padding: 8px 18px; font-family: 'Inter', sans-serif; font-size: 12px;
+  padding: 8px 18px; font-family: 'DM Sans', sans-serif; font-size: 12px;
   font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: transparent;
   color: var(--muted); transition: all 0.2s; letter-spacing: 0.04em;
 }
 .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
 .btn-sm.danger:hover { border-color: var(--red); color: var(--red); }
 .btn-export {
-  padding: 8px 18px; font-family: 'Inter', sans-serif; font-size: 12px;
+  padding: 8px 18px; font-family: 'DM Sans', sans-serif; font-size: 12px;
   font-weight: 600; cursor: pointer; background: var(--accent); color: var(--black);
   border: none; transition: all 0.2s;
 }
@@ -72,16 +74,16 @@ body { background: var(--black); color: var(--white); font-family: 'Inter', sans
   padding: 28px 24px; position: relative; overflow: hidden;
 }
 .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), transparent); }
-.stat-num { font-family: 'Syne', sans-serif; font-size: 40px; font-weight: 800; letter-spacing: -0.03em; color: var(--white); line-height: 1; margin-bottom: 6px; }
+.stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 40px; font-weight: 800; letter-spacing: -0.03em; color: var(--white); line-height: 1; margin-bottom: 6px; }
 .stat-num .accent { color: var(--accent); }
 .stat-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 
 /* TABLE */
 .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.table-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
+.table-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; }
 .search-input {
   background: var(--panel); border: 1px solid var(--border); color: var(--white);
-  padding: 10px 16px; font-family: 'Inter', sans-serif; font-size: 13px;
+  padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 13px;
   outline: none; width: 260px; transition: border-color 0.2s;
 }
 .search-input:focus { border-color: var(--accent); }
@@ -114,6 +116,23 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 .loading { text-align: center; padding: 60px; color: var(--muted); font-size: 13px; }
 .dot-pulse::after { content: '...'; animation: dots 1.5s infinite; }
 @keyframes dots { 0%,20%{content:'.'} 40%,60%{content:'..'} 80%,100%{content:'...'} }
+
+@media (max-width: 768px) {
+  .login-card { width:calc(100% - 32px);padding:32px 24px; }
+  .topbar { padding:14px 16px;flex-wrap:wrap;gap:8px; }
+  .topbar-right { gap:8px; }
+  .main { padding:20px 16px; }
+  .stats-row { grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px; }
+  .stat-card { padding:20px 16px; }
+  .stat-num { font-size:28px; }
+  .table-header { flex-direction:column;gap:12px; }
+  .search-input { width:100%; }
+  .table-wrap { overflow-x:auto; }
+  table { min-width:640px; }
+}
+@media (max-width: 480px) {
+  .stats-row { grid-template-columns:1fr; }
+}
 </style>
 </head>
 <body>
@@ -328,7 +347,7 @@ function exportCSV() {
     .then(blob => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; a.download = 'nexopay-waitlist.csv'; a.click();
+      a.href = url; a.download = 'autonomi-waitlist.csv'; a.click();
     });
 }
 

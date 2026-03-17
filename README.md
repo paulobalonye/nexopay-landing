@@ -1,6 +1,6 @@
-# NexoPay — Payment Infrastructure for AI Agents
+# Autonomi — Payment Infrastructure for AI Agents
 
-Landing page for NexoPay, the autonomous payment API built for AI agents.
+Landing page for Autonomi, the autonomous payment API built for AI agents.
 
 ## Pages
 - `/` — Homepage with waitlist form (Airtable-connected)
@@ -13,7 +13,7 @@ Landing page for NexoPay, the autonomous payment API built for AI agents.
 ## Setup: Airtable Waitlist
 
 1. Create a free [Airtable](https://airtable.com) account
-2. Create a new base called **NexoPay Waitlist**
+2. Create a new base called **Autonomi Waitlist**
 3. Create a table called **Waitlist** with these fields:
    - `First Name` (Single line text)
    - `Last Name` (Single line text)
