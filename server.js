@@ -17,7 +17,7 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 // Resend email client — set RESEND_API_KEY via Railway env var
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
-const EMAIL_FROM = 'Agntly <noreply@hitchpay.ng>';
+const EMAIL_FROM = 'Agntly <noreply@agntly.io>';
 
 // ─── RATE LIMITER (in-memory, no dependencies) ─────────────────────────────
 const loginAttempts = new Map(); // IP -> { count, firstAttempt }
