@@ -1,0 +1,12 @@
+{
+  "name": "nexopay-landing",
+  "version": "1.0.0",
+  "description": "NexoPay — Payment infrastructure for AI agents",
+  "scripts": {
+    "start": "npx serve . -l $PORT",
+    "dev": "npx serve . -l 3000"
+  },
+  "dependencies": {
+    "serve": "^14.2.0"
+  }
+}

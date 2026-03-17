@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Features — NexoPay</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+.features-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border); }
+.feat-card { background:var(--black);padding:44px 36px;position:relative;overflow:hidden;transition:background 0.3s; }
+.feat-card:hover { background:var(--panel); }
+.feat-card::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:transform 0.4s ease; }
+.feat-card:hover::before { transform:scaleX(1); }
+.feat-icon { font-size:32px;margin-bottom:20px;display:block; }
+.feat-card h3 { font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin-bottom:12px;letter-spacing:-0.01em; }
+.feat-card p { font-size:13px;color:var(--muted);line-height:1.8; }
+.feat-tag { position:absolute;top:20px;right:20px;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;background:rgba(0,229,160,0.08);color:var(--accent);padding:3px 10px;border:1px solid rgba(0,229,160,0.15); }
+.feat-list { margin-top:16px;display:flex;flex-direction:column;gap:8px; }
+.feat-list li { font-size:12px;color:var(--muted);list-style:none;display:flex;align-items:flex-start;gap:8px;line-height:1.6; }
+.feat-list li::before { content:'→';color:var(--accent);flex-shrink:0;font-size:11px;margin-top:2px; }
+.comparison { margin:0 48px 80px;border:1px solid var(--border); }
+.comp-header { display:grid;grid-template-columns:2fr 1fr 1fr 1fr;background:var(--panel);border-bottom:1px solid var(--border); }
+.comp-row { display:grid;grid-template-columns:2fr 1fr 1fr 1fr;border-bottom:1px solid var(--border); }
+.comp-row:last-child { border-bottom:none; }
+.comp-cell { padding:18px 24px;font-size:13px;color:var(--muted);border-right:1px solid var(--border);display:flex;align-items:center; }
+.comp-cell:last-child { border-right:none; }
+.comp-cell.head { font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--white); }
+.comp-cell.nexo { color:var(--accent);font-weight:500; }
+.comp-cell.feature-name { color:var(--white); }
+.check { color:var(--accent);font-size:16px; }
+.cross { color:var(--muted);font-size:16px; }
+.partial { color:#ffb84d;font-size:11px; }
+.stack-section { padding:80px 48px;border-top:1px solid var(--border); }
+.stack-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:48px; }
+.stack-card { background:var(--black);padding:32px 28px;transition:background 0.3s; }
+.stack-card:hover { background:var(--panel); }
+.stack-card .layer { font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:10px; }
+.stack-card .tech { font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px; }
+.stack-card .why { font-size:12px;color:var(--muted);line-height:1.7; }
+.cta-band { padding:100px 48px;text-align:center;background:var(--panel);border-top:1px solid var(--border); }
+.cta-band h2 { font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-0.03em;margin-bottom:20px; }
+.cta-band p { font-size:15px;color:var(--muted);margin-bottom:40px; }
+.cta-actions { display:flex;gap:16px;justify-content:center; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="section-tag">Features</div>
+  <h1 class="page-title">Everything agents<br>need to <span class="italic">transact.</span></h1>
+  <p class="page-subtitle">NexoPay is built from the ground up for AI agents — not adapted from human fintech. Here's what that means in practice.</p>
+</div>
+
+<div class="content-section">
+  <div class="features-grid">
+    <div class="feat-card reveal">
+      <span class="feat-icon">⚡</span>
+      <div class="feat-tag">Core</div>
+      <h3>Sub-2ms Settlements</h3>
+      <p>Agent-to-agent transfers settle on Base L2 with on-chain finality. No batching, no waiting, no reconciliation.</p>
+      <ul class="feat-list">
+        <li>Average 1.8ms end-to-end</li>
+        <li>On-chain finality via Base L2</li>
+        <li>Webhook confirmation on every tx</li>
+        <li>Transaction receipt with full metadata</li>
+      </ul>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">🔒</span>
+      <div class="feat-tag">Security</div>
+      <h3>HSM Key Management</h3>
+      <p>All private keys live in AWS KMS hardware security modules. No plaintext keys anywhere in the stack — ever.</p>
+      <ul class="feat-list">
+        <li>AWS KMS + HashiCorp Vault</li>
+        <li>FIPS 140-2 Level 3 hardware</li>
+        <li>Zero plaintext key exposure</li>
+        <li>Annual penetration testing</li>
+      </ul>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">📋</span>
+      <div class="feat-tag">Control</div>
+      <h3>Spending Rules Engine</h3>
+      <p>Define per-wallet policies that enforce autonomously on every transaction before it clears.</p>
+      <ul class="feat-list">
+        <li>Daily & per-transaction limits</li>
+        <li>Recipient whitelist / blacklist</li>
+        <li>Category-based restrictions</li>
+        <li>Instant kill switch via API or UI</li>
+      </ul>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">🤝</span>
+      <div class="feat-tag">Smart Contracts</div>
+      <h3>Escrow & Task Settlement</h3>
+      <p>Agents lock funds in smart contract escrow when assigning tasks. Funds release automatically on completion.</p>
+      <ul class="feat-list">
+        <li>Trustless escrow on Base L2</li>
+        <li>Auto-release on task confirmation</li>
+        <li>Configurable timeout + auto-refund</li>
+        <li>Multi-party settlement support</li>
+      </ul>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">📊</span>
+      <div class="feat-tag">Oversight</div>
+      <h3>Human Control Dashboard</h3>
+      <p>Every transaction your agents make is visible in real time. You stay informed and in control at all times.</p>
+      <ul class="feat-list">
+        <li>Real-time transaction feed</li>
+        <li>Anomaly & overspend alerts</li>
+        <li>One-click wallet freeze</li>
+        <li>Full audit log export (CSV/JSON)</li>
+      </ul>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">🛠️</span>
+      <div class="feat-tag">Developer</div>
+      <h3>Best-in-Class DX</h3>
+      <p>Integrate in under 30 minutes. SDKs for every major agent framework. Sandbox environment for free.</p>
+      <ul class="feat-list">
+        <li>Python, Node.js, TypeScript SDKs</li>
+        <li>OpenAPI 3.0 spec + Swagger UI</li>
+        <li>Free sandbox with test USDC</li>
+        <li>LangChain, AutoGen, CrewAI support</li>
+      </ul>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">🏦</span>
+      <div class="feat-tag">Enterprise</div>
+      <h3>Multi-Agent Treasury</h3>
+      <p>Manage budgets and spending across entire fleets of agents from a single org account.</p>
+      <ul class="feat-list">
+        <li>Org-level treasury wallet</li>
+        <li>Auto top-up rules per agent</li>
+        <li>Consolidated billing & reporting</li>
+        <li>Role-based dashboard access</li>
+      </ul>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">🔔</span>
+      <div class="feat-tag">Events</div>
+      <h3>Webhook & Event System</h3>
+      <p>Get notified on every payment event. Pipe NexoPay events into your own systems or agent pipelines.</p>
+      <ul class="feat-list">
+        <li>Configurable webhook endpoints</li>
+        <li>Payment confirmed / failed / refunded</li>
+        <li>Spending limit warning events</li>
+        <li>Retry logic + delivery guarantees</li>
+      </ul>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">📜</span>
+      <div class="feat-tag">Compliance</div>
+      <h3>Audit & Compliance</h3>
+      <p>Immutable logs of every decision, payment, and rule change. Built for regulated industries from Day 1.</p>
+      <ul class="feat-list">
+        <li>Tamper-proof transaction ledger</li>
+        <li>OFAC sanctions screening</li>
+        <li>KYB for enterprise accounts</li>
+        <li>SOC 2 Type II (in progress)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARISON -->
+<div class="content-section">
+  <div class="section-tag">Comparison</div>
+  <h2 style="font-family:'Syne',sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.02em;margin-bottom:48px;">NexoPay vs. everything else.</h2>
+  <div class="comparison reveal">
+    <div class="comp-header">
+      <div class="comp-cell head">Feature</div>
+      <div class="comp-cell head nexo">NexoPay</div>
+      <div class="comp-cell head">Stripe</div>
+      <div class="comp-cell head">Crypto Wallet</div>
+    </div>
+    <div class="comp-row"><div class="comp-cell feature-name">Agent-native identity</div><div class="comp-cell nexo"><span class="check">✓</span></div><div class="comp-cell"><span class="cross">✗</span></div><div class="comp-cell"><span class="cross">✗</span></div></div>
+    <div class="comp-row"><div class="comp-cell feature-name">No human auth required</div><div class="comp-cell nexo"><span class="check">✓</span></div><div class="comp-cell"><span class="cross">✗</span></div><div class="comp-cell"><span class="partial">Partial</span></div></div>
+    <div class="comp-row"><div class="comp-cell feature-name">Programmable spending rules</div><div class="comp-cell nexo"><span class="check">✓</span></div><div class="comp-cell"><span class="cross">✗</span></div><div class="comp-cell"><span class="cross">✗</span></div></div>
+    <div class="comp-row"><div class="comp-cell feature-name">Smart contract escrow</div><div class="comp-cell nexo"><span class="check">✓</span></div><div class="comp-cell"><span class="cross">✗</span></div><div class="comp-cell"><span class="partial">DIY only</span></div></div>
+    <div class="comp-row"><div class="comp-cell feature-name">Sub-2ms settlement</div><div class="comp-cell nexo"><span class="check">✓</span></div><div class="comp-cell"><span class="cross">✗</span></div><div class="comp-cell"><span class="partial">Chain-dependent</span></div></div>
+    <div class="comp-row"><div class="comp-cell feature-name">HSM key management</div><div class="comp-cell nexo"><span class="check">✓</span></div><div class="comp-cell"><span class="partial">N/A</span></div><div class="comp-cell"><span class="cross">✗</span></div></div>
+    <div class="comp-row"><div class="comp-cell feature-name">Human oversight dashboard</div><div class="comp-cell nexo"><span class="check">✓</span></div><div class="comp-cell"><span class="partial">Basic</span></div><div class="comp-cell"><span class="cross">✗</span></div></div>
+    <div class="comp-row"><div class="comp-cell feature-name">Agent SDK (Python/TS/Node)</div><div class="comp-cell nexo"><span class="check">✓</span></div><div class="comp-cell"><span class="partial">Generic API</span></div><div class="comp-cell"><span class="cross">✗</span></div></div>
+    <div class="comp-row"><div class="comp-cell feature-name">$0.001 per transaction</div><div class="comp-cell nexo"><span class="check">✓</span></div><div class="comp-cell"><span class="cross">2.9% + $0.30</span></div><div class="comp-cell"><span class="partial">Gas fees vary</span></div></div>
+  </div>
+</div>
+
+<!-- TECH STACK -->
+<div class="stack-section">
+  <div class="section-tag">Infrastructure</div>
+  <h2 style="font-family:'Syne',sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.02em;">Built on enterprise-grade infrastructure.</h2>
+  <div class="stack-grid">
+    <div class="stack-card reveal"><div class="layer">Blockchain</div><div class="tech">Base L2</div><div class="why">Ethereum L2 — $0.001 fees, sub-second finality, backed by Coinbase</div></div>
+    <div class="stack-card reveal"><div class="layer">Stablecoin</div><div class="tech">USDC</div><div class="why">Circle-issued, regulated, USD-pegged. No volatility.</div></div>
+    <div class="stack-card reveal"><div class="layer">Key Security</div><div class="tech">AWS KMS</div><div class="why">FIPS 140-2 hardware security modules. Zero plaintext keys.</div></div>
+    <div class="stack-card reveal"><div class="layer">API</div><div class="tech">Fastify + TypeScript</div><div class="why">High-throughput, low-latency API with full type safety.</div></div>
+    <div class="stack-card reveal"><div class="layer">Database</div><div class="tech">PostgreSQL</div><div class="why">ACID compliance for financial-grade transaction records.</div></div>
+    <div class="stack-card reveal"><div class="layer">Queue</div><div class="tech">Redis + BullMQ</div><div class="why">Async payment jobs, rate limiting, and real-time events.</div></div>
+    <div class="stack-card reveal"><div class="layer">Cloud</div><div class="tech">AWS ECS + RDS</div><div class="why">Enterprise reliability, multi-AZ, auto-scaling.</div></div>
+    <div class="stack-card reveal"><div class="layer">Monitoring</div><div class="tech">Datadog + Sentry</div><div class="why">Financial-grade observability, alerting, and error tracking.</div></div>
+  </div>
+</div>
+
+<div class="cta-band reveal">
+  <h2>Start building in 30 minutes.</h2>
+  <p>Free sandbox. Free API credits. No credit card required.</p>
+  <div class="cta-actions">
+    <a href="index.html#waitlist" class="btn-primary">Request API Access →</a>
+    <a href="pricing.html" class="btn-ghost">See Pricing</a>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+</body>
+</html>

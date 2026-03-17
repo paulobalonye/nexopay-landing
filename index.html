@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexoPay — Payments Infrastructure for AI Agents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #060608;
+    --off-black: #0d0d12;
+    --panel: #111118;
+    --border: rgba(255,255,255,0.07);
+    --white: #f5f4f0;
+    --muted: #6b6b7a;
+    --accent: #00e5a0;
+    --accent2: #0af;
+    --accent3: #ff6b35;
+    --glow: rgba(0, 229, 160, 0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(0,229,160,0.4);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.15s ease;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 48px;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    background: rgba(6,6,8,0.8);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+    color: var(--white);
+  }
+  .logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: var(--black);
+    padding: 10px 22px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    border: none;
+    cursor: none;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover { background: #fff; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 140px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* GRID BG */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,160,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,160,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
+    pointer-events: none;
+  }
+
+  /* GLOWING ORB */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,229,160,0.12), transparent 70%);
+    top: -100px; right: -100px;
+    animation: float1 8s ease-in-out infinite;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,170,255,0.08), transparent 70%);
+    bottom: 0; left: 100px;
+    animation: float2 10s ease-in-out infinite;
+  }
+
+  @keyframes float1 {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(-30px, 30px) scale(1.05); }
+  }
+  @keyframes float2 {
+    0%, 100% { transform: translate(0,0); }
+    50% { transform: translate(20px, -20px); }
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,229,160,0.08);
+    border: 1px solid rgba(0,229,160,0.2);
+    padding: 6px 16px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 40px;
+    width: fit-content;
+    animation: fadeUp 0.8s ease both;
+  }
+  .badge-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(52px, 7vw, 96px);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    max-width: 900px;
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .hero-title .italic-serif {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 520px;
+    margin-bottom: 56px;
+    font-weight: 300;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--black);
+    padding: 16px 36px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    border: none;
+    cursor: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.25s;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: white;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 20px 40px rgba(0,229,160,0.3); }
+  .btn-primary span { position: relative; z-index: 1; }
+
+  .btn-ghost {
+    color: var(--white);
+    padding: 16px 32px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    border: 1px solid var(--border);
+    background: transparent;
+    cursor: none;
+    transition: all 0.25s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* TICKER */
+  .ticker {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    overflow: hidden;
+    background: rgba(255,255,255,0.02);
+    position: relative;
+    z-index: 2;
+  }
+  .ticker-inner {
+    display: flex;
+    gap: 80px;
+    animation: ticker 25s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+  .ticker-item {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ticker-item .dot { color: var(--accent); font-size: 16px; }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* STATS ROW */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-item {
+    padding: 48px 40px;
+    border-right: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .stat-item:hover::before { transform: scaleX(1); }
+  .stat-item:hover { background: rgba(0,229,160,0.03); }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stat-num .unit { color: var(--accent); }
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* SECTION SHARED */
+  section { position: relative; z-index: 2; }
+  .section-tag {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-tag::before {
+    content: '';
+    display: block;
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+
+  /* HOW IT WORKS */
+  .how {
+    padding: 120px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .how-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(36px, 4vw, 56px);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 24px;
+  }
+  .how-desc { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 48px; }
+
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: flex;
+    gap: 24px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    transition: all 0.2s;
+    cursor: none;
+  }
+  .step:last-child { border-bottom: none; }
+  .step:hover .step-num { color: var(--accent); border-color: var(--accent); }
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .step-content h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .step-content p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+  /* CODE WINDOW */
+  .code-window {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03);
+  }
+  .code-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.02);
+  }
+  .dot-r { width: 10px; height: 10px; background: #ff5f57; border-radius: 50%; }
+  .dot-y { width: 10px; height: 10px; background: #ffbd2e; border-radius: 50%; }
+  .dot-g { width: 10px; height: 10px; background: #28ca42; border-radius: 50%; }
+  .code-filename { font-size: 11px; color: var(--muted); margin-left: 8px; letter-spacing: 0.05em; }
+  pre {
+    padding: 28px;
+    font-size: 12px;
+    line-height: 1.8;
+    overflow-x: auto;
+    font-family: 'DM Mono', monospace;
+  }
+  .c-green { color: #00e5a0; }
+  .c-blue { color: #79c0ff; }
+  .c-orange { color: #ffb84d; }
+  .c-muted { color: #6b6b7a; }
+  .c-string { color: #a5d6ff; }
+  .c-white { color: #e6edf3; }
+
+  /* FEATURES */
+  .features {
+    padding: 120px 48px;
+    border-bottom: 1px solid var(--border);
+  }
+  .features-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 64px;
+  }
+  .features-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .feature-card {
+    padding: 40px 36px;
+    background: var(--black);
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-card:hover { background: var(--panel); }
+  .feature-card:hover .feature-icon { transform: scale(1.1); }
+  .feature-icon {
+    font-size: 28px;
+    margin-bottom: 20px;
+    display: block;
+    transition: transform 0.3s;
+  }
+  .feature-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .feature-card p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .feature-tag {
+    position: absolute;
+    top: 20px; right: 20px;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: rgba(0,229,160,0.1);
+    color: var(--accent);
+    padding: 3px 10px;
+    border: 1px solid rgba(0,229,160,0.2);
+  }
+
+  /* WAITLIST */
+  .waitlist {
+    padding: 120px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+  }
+  .waitlist-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+  .waitlist-sub { font-size: 14px; color: var(--muted); line-height: 1.8; }
+
+  .form-card {
+    background: var(--black);
+    border: 1px solid var(--border);
+    padding: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .form-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+  }
+
+  .form-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .form-input {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--white);
+    padding: 14px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 20px;
+  }
+  .form-input:focus { border-color: var(--accent); background: rgba(0,229,160,0.03); }
+  .form-input::placeholder { color: var(--muted); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  select.form-input {
+    cursor: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b7a' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+  }
+
+  .submit-btn {
+    width: 100%;
+    background: var(--accent);
+    color: var(--black);
+    padding: 18px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    cursor: none;
+    transition: all 0.25s;
+    margin-top: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .submit-btn:hover { background: white; transform: translateY(-2px); box-shadow: 0 16px 32px rgba(0,229,160,0.3); }
+  .submit-btn.success { background: #1aff8a; }
+  .form-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 16px; letter-spacing: 0.05em; }
+
+  /* TRUSTED BY */
+  .trusted {
+    padding: 60px 48px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 64px;
+  }
+  .trusted-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .trusted-logos { display: flex; gap: 48px; align-items: center; flex-wrap: wrap; }
+  .trusted-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  .trusted-logo:hover { color: rgba(255,255,255,0.5); }
+
+  /* FOOTER */
+  footer {
+    padding: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--white);
+  }
+  .footer-logo span { color: var(--accent); }
+  .footer-copy { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; }
+  .footer-links { display: flex; gap: 32px; }
+  .footer-links a { font-size: 11px; color: var(--muted); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--accent); }
+
+  /* SUCCESS STATE */
+  .success-msg {
+    display: none;
+    text-align: center;
+    padding: 40px 0;
+  }
+  .success-msg.show { display: block; }
+  .success-icon { font-size: 48px; margin-bottom: 16px; }
+  .success-msg h3 { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 8px; color: var(--accent); }
+  .success-msg p { font-size: 13px; color: var(--muted); }
+  .form-fields.hide { display: none; }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Nexo<span>Pay</span></div>
+  <ul class="nav-links">
+    <li><a href="how-it-works.html">How it works</a></li>
+    <li><a href="features.html">Features</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="#waitlist">Docs</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">Join Waitlist</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="hero-badge"><span class="badge-dot"></span> Now in Private Beta — 500 slots remaining</div>
+  <h1 class="hero-title">The <span class="italic-serif">payment layer</span><br>for autonomous<br>AI agents.</h1>
+  <p class="hero-sub">Give every AI agent a wallet. Let them transact, hire, and settle — without a human in the loop. Built for the agent economy.</p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})"><span>Request API Access →</span></button>
+    <a href="#how" class="btn-ghost">See how it works</a>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item"><span class="dot">◆</span> Agent-to-Agent Payments</span>
+    <span class="ticker-item"><span class="dot">◆</span> Programmable Spending Rules</span>
+    <span class="ticker-item"><span class="dot">◆</span> Smart Contract Escrow</span>
+    <span class="ticker-item"><span class="dot">◆</span> USDC Stablecoin Native</span>
+    <span class="ticker-item"><span class="dot">◆</span> Real-Time Human Oversight</span>
+    <span class="ticker-item"><span class="dot">◆</span> Enterprise-Grade Security</span>
+    <span class="ticker-item"><span class="dot">◆</span> Sub-Second Settlements</span>
+    <span class="ticker-item"><span class="dot">◆</span> Agent-to-Agent Payments</span>
+    <span class="ticker-item"><span class="dot">◆</span> Programmable Spending Rules</span>
+    <span class="ticker-item"><span class="dot">◆</span> Smart Contract Escrow</span>
+    <span class="ticker-item"><span class="dot">◆</span> USDC Stablecoin Native</span>
+    <span class="ticker-item"><span class="dot">◆</span> Real-Time Human Oversight</span>
+    <span class="ticker-item"><span class="dot">◆</span> Enterprise-Grade Security</span>
+    <span class="ticker-item"><span class="dot">◆</span> Sub-Second Settlements</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat-item">
+    <div class="stat-num"><span class="counter" data-target="2">0</span><span class="unit">ms</span></div>
+    <div class="stat-label">Avg. Settlement Time</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num"><span class="counter" data-target="99">0</span><span class="unit">.9%</span></div>
+    <div class="stat-label">Uptime SLA</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num"><span class="unit">$</span><span class="counter" data-target="0">0</span><span class="unit">.001</span></div>
+    <div class="stat-label">Per Transaction Fee</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num"><span class="counter" data-target="30">0</span><span class="unit">min</span></div>
+    <div class="stat-label">Integration Time</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div>
+    <div class="section-tag">How it works</div>
+    <h2 class="how-title">Three lines of code. Infinite agent transactions.</h2>
+    <p class="how-desc">NexoPay gives your AI agent a programmable financial identity. Set spending rules, fund the wallet, and let your agents transact autonomously — all within guardrails you define.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h4>Create an Agent Wallet</h4>
+          <p>Spin up a wallet for any agent via API in milliseconds. Each wallet gets a unique agentId, balance, and owner.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h4>Set Spending Rules</h4>
+          <p>Define daily limits, per-transaction caps, whitelists, and kill switches. You stay in control at all times.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h4>Agents Transact Autonomously</h4>
+          <p>Agents send, receive, and escrow payments to each other — instantly, on-chain, with full audit trails.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h4>Monitor & Control</h4>
+          <p>Watch every transaction in real time. Freeze any wallet instantly. Export full audit logs for compliance.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="code-window">
+      <div class="code-header">
+        <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+        <span class="code-filename">agent_payment.py</span>
+      </div>
+      <pre><span class="c-muted"># Install: pip install nexopay</span>
+<span class="c-blue">import</span> <span class="c-white">nexopay</span>
+
+<span class="c-muted"># Initialize client</span>
+<span class="c-white">client</span> <span class="c-green">=</span> <span class="c-white">nexopay.Client(</span>
+  <span class="c-orange">api_key</span><span class="c-green">=</span><span class="c-string">"npx_live_..."</span>
+<span class="c-white">)</span>
+
+<span class="c-muted"># Create a wallet for your agent</span>
+<span class="c-white">wallet</span> <span class="c-green">=</span> <span class="c-white">client.wallets.create(</span>
+  <span class="c-orange">agent_id</span><span class="c-green">=</span><span class="c-string">"research-agent-01"</span><span class="c-white">,</span>
+  <span class="c-orange">rules</span><span class="c-green">=</span><span class="c-white">{</span>
+    <span class="c-string">"daily_limit_usd"</span><span class="c-white">:</span> <span class="c-orange">50</span><span class="c-white">,</span>
+    <span class="c-string">"max_per_tx_usd"</span><span class="c-white">:</span> <span class="c-orange">10</span>
+  <span class="c-white">}</span>
+<span class="c-white">)</span>
+
+<span class="c-muted"># Agent pays another agent</span>
+<span class="c-white">tx</span> <span class="c-green">=</span> <span class="c-white">client.payments.send(</span>
+  <span class="c-orange">from_wallet</span><span class="c-green">=</span><span class="c-string">"research-agent-01"</span><span class="c-white">,</span>
+  <span class="c-orange">to_wallet</span><span class="c-green">=</span><span class="c-string">"data-agent-07"</span><span class="c-white">,</span>
+  <span class="c-orange">amount_usd</span><span class="c-green">=</span><span class="c-orange">2.50</span><span class="c-white">,</span>
+  <span class="c-orange">memo</span><span class="c-green">=</span><span class="c-string">"Dataset retrieval task"</span>
+<span class="c-white">)</span>
+
+<span class="c-muted"># tx.status → "confirmed" ✓</span>
+<span class="c-muted"># tx.settled_in → "1.8ms" ⚡</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-header">
+    <div>
+      <div class="section-tag">Features</div>
+      <h2 class="features-title">Everything agents<br>need to transact.</h2>
+    </div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">⚡</span>
+      <div class="feature-tag">Core</div>
+      <h3>Instant Settlements</h3>
+      <p>Sub-2ms agent-to-agent transfers on Base L2. No waiting, no batching. Real-time confirmations with on-chain finality.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔒</span>
+      <div class="feature-tag">Security</div>
+      <h3>HSM Key Management</h3>
+      <p>Private keys are stored in AWS KMS hardware security modules. Zero plaintext keys. Enterprise-grade cryptographic security.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📋</span>
+      <div class="feature-tag">Control</div>
+      <h3>Spending Rules Engine</h3>
+      <p>Define daily limits, per-transaction caps, whitelist recipients, and category restrictions per agent. Kill switch included.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🤝</span>
+      <div class="feature-tag">Smart Contracts</div>
+      <h3>Escrow & Task Settlement</h3>
+      <p>Lock funds until a task is confirmed complete. Smart contracts auto-release or refund — no disputes, no delays.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📊</span>
+      <div class="feature-tag">Oversight</div>
+      <h3>Human Dashboard</h3>
+      <p>Real-time transaction feed, spending alerts, one-click wallet freeze, and full audit log export for every agent you run.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🛠️</span>
+      <div class="feature-tag">DX</div>
+      <h3>SDK in 3 Languages</h3>
+      <p>Python, Node.js, and TypeScript SDKs ship Day 1. Full OpenAPI 3.0 spec. Sandbox environment. Integrate in under 30 minutes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TRUSTED BY -->
+<div class="trusted">
+  <span class="trusted-label">Trusted by builders at</span>
+  <div class="trusted-logos">
+    <span class="trusted-logo">OPENAI</span>
+    <span class="trusted-logo">LANGCHAIN</span>
+    <span class="trusted-logo">AUTOGEN</span>
+    <span class="trusted-logo">CREWAI</span>
+    <span class="trusted-logo">MISTRAL</span>
+    <span class="trusted-logo">COHERE</span>
+  </div>
+</div>
+
+<!-- WAITLIST -->
+<section class="waitlist" id="waitlist">
+  <div>
+    <div class="section-tag">Get Early Access</div>
+    <h2 class="waitlist-title">Be first to<br>build on<br>NexoPay.</h2>
+    <p class="waitlist-sub">We're onboarding 500 developers in our private beta. Join the waitlist and we'll give you free API credits, early pricing locks, and a direct line to our founding team.</p>
+  </div>
+  <div class="form-card">
+    <div class="form-fields" id="formFields">
+      <div class="form-row">
+        <div>
+          <label class="form-label">First Name</label>
+          <input type="text" class="form-input" id="firstName" placeholder="Ada">
+        </div>
+        <div>
+          <label class="form-label">Last Name</label>
+          <input type="text" class="form-input" id="lastName" placeholder="Lovelace">
+        </div>
+      </div>
+      <label class="form-label">Work Email</label>
+      <input type="email" class="form-input" id="email" placeholder="ada@company.com">
+      <label class="form-label">Company / Project</label>
+      <input type="text" class="form-input" id="company" placeholder="My AI Startup">
+      <label class="form-label">What are you building?</label>
+      <select class="form-input" id="useCase">
+        <option value="" disabled selected>Select your use case</option>
+        <option>Multi-agent pipeline / orchestration</option>
+        <option>AI agent marketplace</option>
+        <option>Autonomous coding agents</option>
+        <option>Research / data gathering agents</option>
+        <option>Enterprise workflow automation</option>
+        <option>Other</option>
+      </select>
+      <label class="form-label">Expected Monthly Transaction Volume</label>
+      <select class="form-input" id="volume">
+        <option value="" disabled selected>Select volume</option>
+        <option>Under $1,000</option>
+        <option>$1,000 – $10,000</option>
+        <option>$10,000 – $100,000</option>
+        <option>$100,000+</option>
+      </select>
+      <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">REQUEST API ACCESS →</button>
+      <p class="form-note">No spam. No credit card required. Cancel anytime.</p>
+    </div>
+    <div class="success-msg" id="successMsg">
+      <div class="success-icon">✅</div>
+      <h3>You're on the list.</h3>
+      <p>We'll reach out within 48 hours with your API key and onboarding guide.<br><br>In the meantime, check your inbox for a confirmation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Nexo<span>Pay</span></div>
+  <div class="footer-copy">© 2026 NexoPay Inc. All rights reserved.</div>
+  <div class="footer-links">
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="features.html">Features</a>
+    <a href="how-it-works.html">How It Works</a>
+    <a href="pricing.html">Pricing</a>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animCursor() {
+    cursor.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+
+  // Counter animation
+  function animateCounter(el) {
+    const target = +el.dataset.target;
+    let current = 0;
+    const step = target / 40;
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = Math.floor(current);
+      if (current >= target) clearInterval(timer);
+    }, 30);
+  }
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) animateCounter(e.target); });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.counter').forEach(el => observer.observe(el));
+
+  // Airtable waitlist submission
+  async function handleSubmit() {
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const company = document.getElementById('company').value.trim();
+    const useCase = document.getElementById('useCase').value;
+    const volume = document.getElementById('volume').value;
+
+    if (!firstName || !email) {
+      document.getElementById('email').style.borderColor = '#ff6b35';
+      setTimeout(() => document.getElementById('email').style.borderColor = '', 2000);
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = 'Submitting...';
+    btn.disabled = true;
+
+    // ⬇️ REPLACE these values with your own Airtable details
+    const AIRTABLE_API_KEY = 'YOUR_AIRTABLE_API_KEY';
+    const AIRTABLE_BASE_ID = 'YOUR_BASE_ID';
+    const AIRTABLE_TABLE = 'Waitlist';
+
+    try {
+      const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          fields: {
+            'First Name': firstName,
+            'Last Name': lastName,
+            'Email': email,
+            'Company': company,
+            'Use Case': useCase,
+            'Monthly Volume': volume,
+            'Submitted At': new Date().toISOString(),
+            'Source': 'Landing Page'
+          }
+        })
+      });
+
+      if (res.ok) {
+        document.getElementById('formFields').classList.add('hide');
+        document.getElementById('successMsg').classList.add('show');
+      } else {
+        throw new Error('Submission failed');
+      }
+    } catch (err) {
+      btn.textContent = 'REQUEST API ACCESS →';
+      btn.disabled = false;
+      btn.style.background = '#ff6b35';
+      setTimeout(() => btn.style.background = '', 2000);
+      console.error('Airtable error:', err);
+    }
+  }
+
+  // Scroll reveal
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.feature-card, .step, .stat-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    revealObserver.observe(el);
+  });
+</script>
+</body>
+</html>
