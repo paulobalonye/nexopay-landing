@@ -8,7 +8,7 @@ const NAV_HTML = `
     <li><a href="how-it-works.html">How it works</a></li>
     <li><a href="features.html">Features</a></li>
     <!-- <li><a href="pricing.html">Pricing</a></li> -->
-    <li><a href="index.html#waitlist">Docs</a></li>
+    <li><a href="index.html#waitlist">Get Access</a></li>
   </ul>
   <a href="index.html#waitlist" class="nav-cta">Join Waitlist</a>
   <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>

@@ -1,56 +1,44 @@
 # Autonomi — Payment Infrastructure for AI Agents
 
-Landing page for Autonomi, the autonomous payment API built for AI agents.
+Landing page and waitlist backend for Autonomi, the autonomous payment API built for AI agents.
 
 ## Pages
-- `/` — Homepage with waitlist form (Airtable-connected)
+- `/` — Homepage with waitlist form
 - `/how-it-works.html` — Step-by-step explainer + FAQ
 - `/features.html` — Full feature grid + competitor comparison
-- `/pricing.html` — Plans, transaction fees, pricing FAQ
+- `/pricing.html` — Plans and pricing (currently hidden from nav)
 - `/privacy.html` — Privacy Policy
 - `/terms.html` — Terms of Service
+- `/admin` — Admin dashboard (password-protected)
 
-## Setup: Airtable Waitlist
+## Tech Stack
+- **Server:** Express.js (Node.js)
+- **Database:** PostgreSQL (via Railway)
+- **Frontend:** Pure HTML/CSS/JS — no build step
+- **Fonts:** Space Grotesk, DM Sans (Google Fonts)
+- **Deployment:** Railway
 
-1. Create a free [Airtable](https://airtable.com) account
-2. Create a new base called **Autonomi Waitlist**
-3. Create a table called **Waitlist** with these fields:
-   - `First Name` (Single line text)
-   - `Last Name` (Single line text)
-   - `Email` (Email)
-   - `Company` (Single line text)
-   - `Use Case` (Single select)
-   - `Monthly Volume` (Single select)
-   - `Submitted At` (Date)
-   - `Source` (Single line text)
-4. Get your [Airtable API key](https://airtable.com/account)
-5. Get your Base ID from the Airtable API docs URL
-6. In `index.html`, replace:
-   ```js
-   const AIRTABLE_API_KEY = 'YOUR_AIRTABLE_API_KEY';
-   const AIRTABLE_BASE_ID = 'YOUR_BASE_ID';
-   ```
+## Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `DATABASE_URL` | Yes | PostgreSQL connection string (auto-injected by Railway) |
+| `ADMIN_PASSWORD` | Yes | Password for the admin dashboard |
+| `PORT` | No | Server port (defaults to 3000) |
+
+## Local Development
+
+```bash
+npm install
+DATABASE_URL=postgres://... ADMIN_PASSWORD=yourpassword node server.js
+```
+
+Then open http://localhost:3000
 
 ## Deploy on Railway
 
 1. Push this repo to GitHub
 2. Connect Railway to your GitHub repo
-3. Railway will auto-detect it as a static site
-4. Set the start command to serve static files (or use Railway's static hosting)
-
-## Local Development
-
-```bash
-# Serve locally with any static file server
-npx serve .
-# or
-python3 -m http.server 3000
-```
-
-Then open http://localhost:3000
-
-## Tech
-- Pure HTML/CSS/JS — no build step required
-- Google Fonts (Syne, DM Mono, Instrument Serif)
-- Airtable REST API for form submissions
-- Deployed as static site on Railway
+3. Add a PostgreSQL plugin
+4. Set `ADMIN_PASSWORD` in Railway environment variables
+5. Railway auto-deploys on push

@@ -3,7 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <title>Autonomi — Payments Infrastructure for AI Agents</title>
+<meta name="description" content="Autonomi is the payment infrastructure API for AI agents. Create wallets, send and receive USDC, and let your agents transact autonomously.">
+<meta property="og:title" content="Autonomi — Payments Infrastructure for AI Agents">
+<meta property="og:description" content="Give every AI agent a wallet. Let them transact, hire, and settle — without a human in the loop. Built for the agent economy.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://autonomi.io">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Autonomi — Payments Infrastructure for AI Agents">
+<meta name="twitter:description" content="Payment infrastructure API for AI agents. Create wallets, transact autonomously, settle instantly.">
+<meta name="theme-color" content="#060608">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
@@ -728,7 +738,7 @@
     <li><a href="how-it-works.html">How it works</a></li>
     <li><a href="features.html">Features</a></li>
     
-    <li><a href="#waitlist">Docs</a></li>
+    <li><a href="#waitlist">Get Access</a></li>
   </ul>
   <button class="nav-cta" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">Join Waitlist</button>
   <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -835,7 +845,7 @@
 
 <span class="c-muted"># Initialize client</span>
 <span class="c-white">client</span> <span class="c-green">=</span> <span class="c-white">autonomi.Client(</span>
-  <span class="c-orange">api_key</span><span class="c-green">=</span><span class="c-string">"npx_live_..."</span>
+  <span class="c-orange">api_key</span><span class="c-green">=</span><span class="c-string">"aut_live_..."</span>
 <span class="c-white">)</span>
 
 <span class="c-muted"># Create a wallet for your agent</span>
@@ -909,16 +919,16 @@
   </div>
 </section>
 
-<!-- TRUSTED BY -->
+<!-- BUILT FOR -->
 <div class="trusted">
-  <span class="trusted-label">Trusted by builders at</span>
+  <span class="trusted-label">Built for teams using</span>
   <div class="trusted-logos">
-    <span class="trusted-logo">OPENAI</span>
     <span class="trusted-logo">LANGCHAIN</span>
     <span class="trusted-logo">AUTOGEN</span>
     <span class="trusted-logo">CREWAI</span>
-    <span class="trusted-logo">MISTRAL</span>
-    <span class="trusted-logo">COHERE</span>
+    <span class="trusted-logo">OPENAI AGENTS</span>
+    <span class="trusted-logo">MISTRAL AGENTS</span>
+    <span class="trusted-logo">CLAUDE MCP</span>
   </div>
 </div>
 
@@ -987,7 +997,6 @@
   </div>
 </footer>
 
-<script src="config.js"></script>
 <script>
   // Custom cursor
   const cursor = document.getElementById('cursor');

@@ -11,8 +11,48 @@ const pool = new Pool({
   connectionTimeoutMillis: 10000,
 });
 
-// Admin password — set via Railway env var ADMIN_PASSWORD
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'autonomi2026';
+// Admin password — set via Railway env var ADMIN_PASSWORD (no default)
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+// ─── RATE LIMITER (in-memory, no dependencies) ─────────────────────────────
+const loginAttempts = new Map(); // IP -> { count, firstAttempt }
+const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
+const RATE_LIMIT_MAX = 5;
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const record = loginAttempts.get(ip);
+  if (!record) return false;
+  if (now - record.firstAttempt > RATE_LIMIT_WINDOW) {
+    loginAttempts.delete(ip);
+    return false;
+  }
+  return record.count >= RATE_LIMIT_MAX;
+}
+
+function recordFailedAttempt(ip) {
+  const now = Date.now();
+  const record = loginAttempts.get(ip);
+  if (!record || now - record.firstAttempt > RATE_LIMIT_WINDOW) {
+    loginAttempts.set(ip, { count: 1, firstAttempt: now });
+  } else {
+    loginAttempts.set(ip, { ...record, count: record.count + 1 });
+  }
+}
+
+function clearAttempts(ip) {
+  loginAttempts.delete(ip);
+}
+
+// ─── VALIDATION HELPERS ─────────────────────────────────────────────────────
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const INPUT_LIMITS = { name: 200, email: 254, company: 200 };
+
+function sanitizeCsvCell(value) {
+  const str = String(value == null ? '' : value).replace(/"/g, '""');
+  if (/^[=+\-@]/.test(str)) return "'" + str;
+  return str;
+}
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -35,12 +75,43 @@ async function initDB() {
   console.log('✅ Database ready');
 }
 
+// ─── ADMIN AUTH MIDDLEWARE ────────────────────────────────────────────────────
+function requireAdmin(req, res) {
+  if (!ADMIN_PASSWORD) {
+    res.status(503).json({ error: 'Admin not configured' });
+    return false;
+  }
+  const auth = req.headers.authorization;
+  const expected = 'Bearer ' + Buffer.from(ADMIN_PASSWORD).toString('base64');
+  if (auth !== expected) {
+    res.status(401).json({ error: 'Unauthorized' });
+    return false;
+  }
+  return true;
+}
+
 // ─── API: SUBMIT WAITLIST ────────────────────────────────────────────────────
 app.post('/api/waitlist', async (req, res) => {
   const { name, email, company, use_case, monthly_volume } = req.body;
 
   if (!name || !email) {
     return res.status(400).json({ error: 'Name and email are required' });
+  }
+
+  // Input length limits
+  if (typeof name === 'string' && name.length > INPUT_LIMITS.name) {
+    return res.status(400).json({ error: 'Name must be 200 characters or fewer' });
+  }
+  if (typeof email === 'string' && email.length > INPUT_LIMITS.email) {
+    return res.status(400).json({ error: 'Email must be 254 characters or fewer' });
+  }
+  if (company && typeof company === 'string' && company.length > INPUT_LIMITS.company) {
+    return res.status(400).json({ error: 'Company must be 200 characters or fewer' });
+  }
+
+  // Email format validation
+  if (!EMAIL_REGEX.test(email)) {
+    return res.status(400).json({ error: 'Invalid email format' });
   }
 
   try {
@@ -63,19 +134,28 @@ app.post('/api/waitlist', async (req, res) => {
 
 // ─── ADMIN: AUTH CHECK ───────────────────────────────────────────────────────
 app.post('/api/admin/login', (req, res) => {
+  if (!ADMIN_PASSWORD) {
+    return res.status(503).json({ error: 'Admin not configured' });
+  }
+
+  const ip = req.ip || req.connection.remoteAddress;
+  if (isRateLimited(ip)) {
+    return res.status(429).json({ error: 'Too many failed attempts. Try again later.' });
+  }
+
   const { password } = req.body;
   if (password === ADMIN_PASSWORD) {
+    clearAttempts(ip);
     res.json({ success: true, token: Buffer.from(ADMIN_PASSWORD).toString('base64') });
   } else {
+    recordFailedAttempt(ip);
     res.status(401).json({ error: 'Wrong password' });
   }
 });
 
 // ─── ADMIN: GET ALL LEADS ────────────────────────────────────────────────────
 app.get('/api/admin/leads', async (req, res) => {
-  const auth = req.headers.authorization;
-  const expected = 'Bearer ' + Buffer.from(ADMIN_PASSWORD).toString('base64');
-  if (auth !== expected) return res.status(401).json({ error: 'Unauthorized' });
+  if (!requireAdmin(req, res)) return;
 
   try {
     const result = await pool.query(
@@ -89,19 +169,20 @@ app.get('/api/admin/leads', async (req, res) => {
 
 // ─── ADMIN: DELETE LEAD ──────────────────────────────────────────────────────
 app.delete('/api/admin/leads/:id', async (req, res) => {
-  const auth = req.headers.authorization;
-  const expected = 'Bearer ' + Buffer.from(ADMIN_PASSWORD).toString('base64');
-  if (auth !== expected) return res.status(401).json({ error: 'Unauthorized' });
+  if (!requireAdmin(req, res)) return;
 
-  await pool.query('DELETE FROM waitlist WHERE id = $1', [req.params.id]);
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({ error: 'Invalid id: must be a positive integer' });
+  }
+
+  await pool.query('DELETE FROM waitlist WHERE id = $1', [id]);
   res.json({ success: true });
 });
 
 // ─── ADMIN: EXPORT CSV ───────────────────────────────────────────────────────
 app.get('/api/admin/export', async (req, res) => {
-  const auth = req.headers.authorization;
-  const expected = 'Bearer ' + Buffer.from(ADMIN_PASSWORD).toString('base64');
-  if (auth !== expected) return res.status(401).json({ error: 'Unauthorized' });
+  if (!requireAdmin(req, res)) return;
 
   const result = await pool.query(`SELECT * FROM waitlist ORDER BY created_at DESC`);
   const rows = result.rows;
@@ -109,7 +190,7 @@ app.get('/api/admin/export', async (req, res) => {
   const csv = [
     'ID,Name,Email,Company,Use Case,Monthly Volume,Source,Joined',
     ...rows.map(r =>
-      `${r.id},"${r.name}","${r.email}","${r.company}","${r.use_case}","${r.monthly_volume}","${r.source}","${r.created_at}"`
+      `${r.id},"${sanitizeCsvCell(r.name)}","${sanitizeCsvCell(r.email)}","${sanitizeCsvCell(r.company)}","${sanitizeCsvCell(r.use_case)}","${sanitizeCsvCell(r.monthly_volume)}","${sanitizeCsvCell(r.source)}","${sanitizeCsvCell(r.created_at)}"`
     )
   ].join('\n');
 
@@ -119,7 +200,7 @@ app.get('/api/admin/export', async (req, res) => {
 });
 
 // ─── SERVE PAGES ─────────────────────────────────────────────────────────────
-app.get('/admin', (req, res) => {
+app.get('/admin', (_req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
