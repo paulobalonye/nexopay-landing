@@ -1,5 +1,6 @@
 const express = require('express');
 const { Pool } = require('pg');
+const { Resend } = require('resend');
 const path = require('path');
 
 const app = express();
@@ -13,6 +14,10 @@ const pool = new Pool({
 
 // Admin password — set via Railway env var ADMIN_PASSWORD (no default)
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+// Resend email client — set RESEND_API_KEY via Railway env var
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+const EMAIL_FROM = 'Autonomi <noreply@hitchpay.ng>';
 
 // ─── RATE LIMITER (in-memory, no dependencies) ─────────────────────────────
 const loginAttempts = new Map(); // IP -> { count, firstAttempt }
@@ -47,6 +52,48 @@ function clearAttempts(ip) {
 // ─── VALIDATION HELPERS ─────────────────────────────────────────────────────
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const INPUT_LIMITS = { name: 200, email: 254, company: 200 };
+
+// ─── WAITLIST EMAIL ──────────────────────────────────────────────────────────
+function buildWaitlistEmail(firstName) {
+  return `<div style="margin:0;padding:0;background-color:#060608;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#060608;">
+<tr><td align="center" style="padding:40px 20px;">
+<table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;width:100%;">
+  <tr><td style="padding:32px 40px 24px;text-align:left;"><span style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:24px;font-weight:800;color:#f5f4f0;letter-spacing:-0.5px;">Autono<span style="color:#00e5a0;">mi</span></span></td></tr>
+  <tr><td style="padding:0 40px;"><div style="height:2px;background:linear-gradient(90deg,#00e5a0,#0af,#ff6b35);border-radius:2px;"></div></td></tr>
+  <tr><td style="padding:48px 40px 32px;"><h1 style="margin:0 0 8px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:32px;font-weight:800;color:#f5f4f0;letter-spacing:-0.02em;line-height:1.1;">You're in.</h1><p style="margin:0;font-size:14px;color:#00e5a0;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;">Waitlist confirmed</p></td></tr>
+  <tr><td style="padding:0 40px 32px;"><p style="margin:0 0 20px;font-size:16px;color:#c8c8d0;line-height:1.7;">Hey ${firstName},</p><p style="margin:0 0 20px;font-size:16px;color:#c8c8d0;line-height:1.7;">Thanks for signing up for early access to Autonomi &mdash; the payment infrastructure API built for AI agents.</p><p style="margin:0;font-size:16px;color:#c8c8d0;line-height:1.7;">We're onboarding developers in small batches during our private beta. You'll hear from us within <strong style="color:#f5f4f0;">48 hours</strong> with your API key and onboarding guide.</p></td></tr>
+  <tr><td style="padding:0 40px 40px;"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#111118;border:1px solid rgba(255,255,255,0.07);"><tr><td style="padding:28px 32px;"><p style="margin:0 0 16px;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#00e5a0;font-weight:600;">What's included in early access</p><table role="presentation" cellspacing="0" cellpadding="0" border="0"><tr><td style="padding:6px 0;font-size:15px;color:#c8c8d0;line-height:1.6;"><span style="color:#00e5a0;margin-right:10px;">&#10003;</span> Free API credits to start building</td></tr><tr><td style="padding:6px 0;font-size:15px;color:#c8c8d0;line-height:1.6;"><span style="color:#00e5a0;margin-right:10px;">&#10003;</span> Early pricing lock &mdash; your rate stays forever</td></tr><tr><td style="padding:6px 0;font-size:15px;color:#c8c8d0;line-height:1.6;"><span style="color:#00e5a0;margin-right:10px;">&#10003;</span> Direct Slack channel with the founding team</td></tr><tr><td style="padding:6px 0;font-size:15px;color:#c8c8d0;line-height:1.6;"><span style="color:#00e5a0;margin-right:10px;">&#10003;</span> Python, Node.js &amp; TypeScript SDKs on Day 1</td></tr></table></td></tr></table></td></tr>
+  <tr><td style="padding:0 40px 40px;text-align:left;"><a href="https://autonomi.io/how-it-works.html" style="display:inline-block;background-color:#00e5a0;color:#060608;padding:16px 36px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:700;letter-spacing:0.05em;text-decoration:none;text-transform:uppercase;">See How It Works &rarr;</a></td></tr>
+  <tr><td style="padding:0 40px;"><div style="height:1px;background-color:rgba(255,255,255,0.07);"></div></td></tr>
+  <tr><td style="padding:32px 40px;"><p style="margin:0 0 16px;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#6b6b7a;font-weight:600;">While you wait</p><p style="margin:0;font-size:14px;color:#9b9baa;line-height:1.7;">Explore our <a href="https://autonomi.io/features.html" style="color:#00e5a0;text-decoration:none;">feature overview</a> to see what you'll be building with &mdash; from sub-2ms settlements to smart contract escrow and programmable spending rules.</p></td></tr>
+  <tr><td style="padding:0 40px;"><div style="height:1px;background-color:rgba(255,255,255,0.07);"></div></td></tr>
+  <tr><td style="padding:32px 40px;"><p style="margin:0 0 4px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:16px;font-weight:800;color:#f5f4f0;letter-spacing:-0.5px;">Autono<span style="color:#00e5a0;">mi</span></p><p style="margin:0 0 16px;font-size:12px;color:#6b6b7a;">Payments infrastructure for the AI agent economy.</p><p style="margin:0;font-size:11px;color:#4a4a56;line-height:1.6;">&copy; 2026 Autonomi Inc. All rights reserved.<br>You're receiving this because you signed up at autonomi.io.<br><a href="#" style="color:#6b6b7a;text-decoration:underline;">Unsubscribe</a></p></td></tr>
+</table>
+</td></tr></table></div>`;
+}
+
+async function sendWaitlistEmail(email, firstName) {
+  if (!resend) {
+    console.warn('RESEND_API_KEY not set — skipping waitlist email');
+    return;
+  }
+  try {
+    const { error } = await resend.emails.send({
+      from: EMAIL_FROM,
+      to: email,
+      subject: "You're on the Autonomi waitlist",
+      html: buildWaitlistEmail(firstName),
+    });
+    if (error) {
+      console.error('Resend error:', error);
+    } else {
+      console.log(`✉️ Waitlist email sent to ${email}`);
+    }
+  } catch (err) {
+    console.error('Email send failed:', err.message);
+  }
+}
 
 function sanitizeCsvCell(value) {
   const str = String(value == null ? '' : value).replace(/"/g, '""');
@@ -122,6 +169,10 @@ app.post('/api/waitlist', async (req, res) => {
       [name, email, company || '', use_case || '', monthly_volume || '']
     );
     res.json({ success: true, id: result.rows[0].id });
+
+    // Fire-and-forget: send welcome email without blocking the response
+    const firstName = name.split(' ')[0];
+    sendWaitlistEmail(email, firstName);
   } catch (err) {
     if (err.code === '23505') {
       // Duplicate email
