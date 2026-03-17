@@ -3,11 +3,11 @@ const NAV_HTML = `
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <nav>
-  <a href="index.html" class="logo">Nexo<span>Pay</span></a>
+  <a href="index.html" class="logo">Autono<span>mi</span></a>
   <ul class="nav-links">
     <li><a href="how-it-works.html">How it works</a></li>
     <li><a href="features.html">Features</a></li>
-    <li><a href="pricing.html">Pricing</a></li>
+    <!-- <li><a href="pricing.html">Pricing</a></li> -->
     <li><a href="index.html#waitlist">Docs</a></li>
   </ul>
   <a href="index.html#waitlist" class="nav-cta">Join Waitlist</a>
@@ -17,7 +17,7 @@ const NAV_HTML = `
 const FOOTER_HTML = `
 <footer>
   <div>
-    <div class="footer-logo">Nexo<span>Pay</span></div>
+    <div class="footer-logo">Autono<span>mi</span></div>
     <p class="footer-tagline">Payments infrastructure for the AI agent economy.</p>
   </div>
   <div class="footer-cols">
@@ -25,7 +25,7 @@ const FOOTER_HTML = `
       <div class="footer-col-title">Product</div>
       <a href="how-it-works.html">How it Works</a>
       <a href="features.html">Features</a>
-      <a href="pricing.html">Pricing</a>
+      <!-- <a href="pricing.html">Pricing</a> -->
       <a href="index.html#waitlist">API Docs</a>
     </div>
     <div class="footer-col">
