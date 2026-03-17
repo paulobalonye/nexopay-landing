@@ -927,6 +927,7 @@
   </div>
 </footer>
 
+<script src="config.js"></script>
 <script>
   // Custom cursor
   const cursor = document.getElementById('cursor');
@@ -978,9 +979,9 @@
     btn.disabled = true;
 
     // ⬇️ REPLACE these values with your own Airtable details
-    const AIRTABLE_API_KEY = 'YOUR_AIRTABLE_API_KEY';
-    const AIRTABLE_BASE_ID = 'YOUR_BASE_ID';
-    const AIRTABLE_TABLE = 'Waitlist';
+    const AIRTABLE_API_KEY = window.AIRTABLE_KEY;
+    const AIRTABLE_BASE_ID = window.AIRTABLE_BASE;
+    const AIRTABLE_TABLE = window.AIRTABLE_TABLE_ID;
 
     try {
       const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE}`, {
